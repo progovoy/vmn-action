@@ -10,8 +10,9 @@ https://github.com/final-israel/vmn
 ## Usage
 ```yaml
 - id: foo
-  uses: actions/vmn-stamp-action@vmn_stamp_action_0.3.0
+  uses: progovoy/vmn-stamp-action@vmn_stamp_action_0.3.0
   with:
     release-mode: patch
     app-name: my_app_name
  ```
+ 
