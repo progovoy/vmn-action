@@ -1,2 +1,14 @@
 # vmn-stamp-action
-Automatic Versioning Framework
+Action for Git tag-based automatic `Semver`-compliant versioning utilizing the `vmn` utility    
+
+This action was built for basic use of the `vmn` utility. If you want to use `vmn` in a more advanced way, 
+visit its official GitHub page and give it a star:
+https://github.com/final-israel/vmn
+
+## Usage
+- id: foo
+  uses: actions/vmn-stamp-action@vmn_stamp_action_0.2.0
+  with:
+    release-mode: patch
+    app-name: my_app_name
+    
