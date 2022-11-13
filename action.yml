@@ -1,5 +1,5 @@
 name: 'vmn-stamping'
-description: 'Everything you need for stamping'
+description: 'Everything you need for versioning'
 inputs:
   release-mode:
     type: choice
