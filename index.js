@@ -24,7 +24,7 @@ const main = async() => {
     }
 
     await execute(`pip install vmn`);
-    await execute(`vmn init`);
+    await execute(`pwd`);
     //await execute(`vmn init-app ${app_name}`);
 
     err = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
