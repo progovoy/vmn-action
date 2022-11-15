@@ -9727,6 +9727,8 @@ const main = async() => {
 
     await execute(`pip install vmn`);
     await execute(`pwd`);
+    await execute(`ls -la ./`);
+    await execute(`ls -la ../`);
     //await execute(`vmn init-app ${app_name}`);
 
     err = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
