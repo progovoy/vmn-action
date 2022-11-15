@@ -2,15 +2,12 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const childProcess = require("child_process");
 const { promises: fs } = require("fs");
+const { stdout } = require('process');
 
 const execute = (command) => new Promise((resolve, reject) => {
     childProcess.exec(command, (error, stdout, stderr) => {
-        core.info(`stdout:\n${stdout}\nstderr:${stderr}`);
-        if (error || stderr) {
-            reject(stderr);
-            return;
-        }
-        resolve(stdout);
+        return error, stdout, stderr;
+    
     });
 })
 
@@ -26,36 +23,15 @@ const main = async() => {
         );
     }
 
-    try {
-        await execute(`pip install vmn`);
-    } catch (e) {
-        core.setFailed(`Error executing pip install vmn ${e}`);
-    }
+    await execute(`pip install vmn`);
+    await execute(`vmn init`);
+    await execute(`vmn init-app ${app_name}`);
 
-    try {
-        await execute(`vmn init`);
-    } catch (e) {
-        {}
-    }
+    err, stdout, stderr = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
+    core.info(`stdout: ${stdout}`);
 
-    try {
-        await execute(`vmn init-app ${app_name}`);
-    } catch (e) {
-        {}
-    }
-
-    try {
-        await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
-    } catch (e) {
-        core.setFailed(`Error executing vmn stamp ${e}`);
-    }
-
-    try {
-        let out = await execute(`vmn show ${app_name}`);
-        core.setOutput("verstr", out);
-    } catch (e) {
-        core.setFailed(`Error executing vmn stamp ${e}`);
-    }
+    err, stdout, stderr = await execute(`vmn show ${app_name}`);
+    core.setOutput("verstr", stdout);
 }
 
 main().catch(err => {
