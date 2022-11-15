@@ -19,7 +19,7 @@ const main = async() => {
     const app_name = core.getInput('app-name');
     core.info(`Using ${release_mode} release mode for app: ${app_name}`);
 
-    if (!app_name)) {
+    if (!app_name) {
         core.setFailed(
             `App Name parameter must be suplied`
         );
