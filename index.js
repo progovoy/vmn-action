@@ -5,6 +5,7 @@ const { promises: fs } = require("fs");
 
 const execute = (command) => new Promise((resolve, reject) => {
     childProcess.exec(command, (error, stdout, stderr) => {
+        core.info(`stdout:\n${stdout}\nstderr:${stderr}`);
         if (error || stderr) {
             reject(stderr);
             return;
