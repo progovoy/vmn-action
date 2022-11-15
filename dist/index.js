@@ -9729,11 +9729,11 @@ const main = async() => {
     await execute(`vmn init`);
     //await execute(`vmn init-app ${app_name}`);
 
-    err, stdout, stderr = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
-    core.info(`stdout: ${stdout}`);
+    err = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
+    core.info(`stdout: ${err}`);
 
-    err, stdout, stderr = await execute(`vmn show ${app_name}`);
-    core.setOutput("verstr", stdout);
+    err = await execute(`vmn show ${app_name}`);
+    core.setOutput("verstr", err);
 }
 
 main().catch(err => {
