@@ -45,13 +45,7 @@ const main = async() => {
     }
 
     try {
-        await execute(`vmn init-app ${app_name}`);
-    } catch (e) {
-        {}
-    }
-
-    try {
-        await execute(`vmn stamp -r ${release_mode} ${app_name}`);
+        await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
     } catch (e) {
         core.setFailed(`Error executing vmn stamp ${e}`);
     }
