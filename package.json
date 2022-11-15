@@ -1,1 +1,26 @@
-{"author":"","bugs":{"url":"https://github.com/progovoy/vmn-stamp-action.git"},"dependencies":{"@actions/core":"^1.10.0","@actions/github":"^5.1.1","@vercel/ncc":"^0.34.0"},"description":"","homepage":"https://github.com/progovoy/vmn-stamp-action.git#readme","keywords":[],"license":"","main":"index.js","name":"vmn-versioning-action","repository":{"type":"git","url":"git+https://github.com/progovoy/vmn-stamp-action.git"},"scripts":{"postinstall":"pip install vmn","test":"echo \"Error: no test specified\" && exit 1"},"version":"0.6.1"}
+{
+    "author": "",
+    "bugs": {
+        "url": "https://github.com/progovoy/vmn-stamp-action.git"
+    },
+    "dependencies": {
+        "@actions/core": "^1.10.0",
+        "@actions/github": "^5.1.1",
+        "@vercel/ncc": "^0.34.0"
+    },
+    "description": "",
+    "homepage": "https://github.com/progovoy/vmn-stamp-action.git#readme",
+    "keywords": [],
+    "license": "",
+    "main": "index.js",
+    "name": "vmn-versioning-action",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/progovoy/vmn-stamp-action.git"
+    },
+    "scripts": {
+        "postinstall": "pip install vmn",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "version": "0.6.2"
+}
