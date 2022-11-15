@@ -6,8 +6,10 @@ const { stdout } = require('process');
 
 const execute = (command) => new Promise((resolve, reject) => {
     childProcess.exec(command, (error, stdout, stderr) => {
+        core.info(`dddd: ${stdout}`);
+        resolve(error);
+        core.info(`dddd2: ${stdout}`);
         return error, stdout, stderr;
-    
     });
 })
 
