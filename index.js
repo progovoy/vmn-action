@@ -28,6 +28,7 @@ const main = async() => {
     await execute(`ls -la ./`);
     await execute(`ls -la .vmn/${app_name}/`);
     await execute(`git status`);
+    await execute(`git log -n 15`);
     await execute(`vmn init-app ${app_name}`);
 
     err = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
