@@ -6,8 +6,7 @@ const { stdout } = require('process');
 
 const execute = (command) => new Promise((resolve, reject) => {
     childProcess.exec(command, (error, stdout, stderr) => {
-        resolve(error, stdout, stderr);
-        core.info(`dddd2: ${stdout}`);
+        resolve(stdout);
     });
 })
 
@@ -24,18 +23,16 @@ const main = async() => {
     }
 
     await execute(`pip install vmn --pre`);
-    await execute(`pwd`);
-    await execute(`ls -la ./`);
-    await execute(`ls -la .vmn/${app_name}/`);
-    await execute(`git status`);
-    await execute(`git log -n 15`);
+    await execute(`vmn init`);
+    await execute(`vmn goto --pull ${app_name}`);
     await execute(`vmn init-app ${app_name}`);
+    await execute(`vmn goto --pull ${app_name}`);
 
-    err = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
-    core.info(`stdout: ${err}`);
+    let out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
+    core.info(`stdout: ${out}`);
 
-    err = await execute(`vmn show ${app_name}`);
-    core.setOutput("verstr", err);
+    out = await execute(`vmn show ${app_name}`);
+    core.setOutput("verstr", out);
 }
 
 main().catch(err => {
