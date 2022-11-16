@@ -23,7 +23,7 @@ const main = async() => {
         );
     }
 
-    await execute(`pip install vmn`);
+    await execute(`pip install vmn --pre`);
     await execute(`pwd`);
     await execute(`ls -la ./`);
     await execute(`ls -la .vmn/${app_name}/`);
