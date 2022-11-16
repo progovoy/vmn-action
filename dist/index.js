@@ -9716,7 +9716,6 @@ const execute = (command) => new Promise((resolve, reject) => {
 const main = async() => {
     const release_mode = core.getInput('release-mode');
     const app_name = core.getInput('app-name');
-    core.info(`Using ${release_mode} release mode for app: ${app_name}`);
 
     if (!app_name) {
         core.setFailed(
@@ -9731,10 +9730,10 @@ const main = async() => {
     await execute(`vmn goto --pull ${app_name}`);
 
     let out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
-    core.info(`stdout: ${out}`);
+    core.info(`stamp stdout: ${out}`);
 
     out = await execute(`vmn show ${app_name}`);
-    core.setOutput("verstr", out);
+    core.setOutput("verstr", out.split(/\r?\n/)[0]);
 }
 
 main().catch(err => {
