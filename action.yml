@@ -1,4 +1,4 @@
-name: 'vmn-versioning'
+name: 'vmn-action'
 description: 'Production grade solution for automatic versioning with full support for semantic versioning (Semver)'
 branding:
   icon: trending-up
