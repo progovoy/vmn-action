@@ -9733,7 +9733,15 @@ const main = async() => {
     await execute(`vmn init`);
     await execute(`vmn init-app ${app_name}`);
 
-    let out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
+    let out = await execute(`git log`);
+    core.info(`stamp stdout: ${out}`);
+    out = await execute(`git status`);
+    core.info(`stamp stdout: ${out}`);
+    out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
+    core.info(`stamp stdout: ${out}`);
+    out = await execute(`git log`);
+    core.info(`stamp stdout: ${out}`);
+    out = await execute(`git status`);
     core.info(`stamp stdout: ${out}`);
 
     out = await execute(`vmn show ${app_name}`);
