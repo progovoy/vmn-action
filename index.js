@@ -27,7 +27,7 @@ const main = async() => {
         );
     }
 
-    await execute(`pip install vmn --pre`);
+    await execute(`pip install vmn`);
     await execute(`vmn init`);
     await execute(`vmn init-app ${app_name}`);
 
