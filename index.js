@@ -21,11 +21,15 @@ const main = async() => {
         );
     }
 
+    if (!release_mode) {
+        core.setFailed(
+            `Release mode parameter must be suplied`
+        );
+    }
+
     await execute(`pip install vmn --pre`);
     await execute(`vmn init`);
-    await execute(`vmn goto --pull ${app_name}`);
     await execute(`vmn init-app ${app_name}`);
-    await execute(`vmn goto --pull ${app_name}`);
 
     let out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
     core.info(`stamp stdout: ${out}`);
