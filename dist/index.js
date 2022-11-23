@@ -9706,10 +9706,14 @@ const childProcess = __nccwpck_require__(2081);
 const { promises: fs } = __nccwpck_require__(7147);
 const { stdout } = __nccwpck_require__(7282);
 
-const execute = (command) => new Promise((resolve, reject) => {
+const execute = (command, skip_error=false) => new Promise((resolve, reject) => {
     childProcess.exec(command, (error, stdout, stderr) => {
-        if (error || stderr) {
+        if ((error || stderr) && !skip_error) {
             reject(stderr);
+            return;
+        }
+        else if (skip_error) {
+            resolve(stderr);
             return;
         }
 
@@ -9739,8 +9743,8 @@ const main = async() => {
     } catch (e) {
         core.setFailed(`Error executing pip install ${e}`);
     }
-    await execute(`vmn init`);
-    await execute(`vmn init-app ${app_name}`);
+    await execute(`vmn init`, skip_error=true);
+    await execute(`vmn init-app ${app_name}`, skip_error=true);
 
     try{
         let out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
@@ -9749,8 +9753,12 @@ const main = async() => {
         core.setFailed(`Error executing vmn stamp ${e}`);
     }
 
-    out = await execute(`vmn show ${app_name}`);
-    core.setOutput("verstr", out.split(/\r?\n/)[0]);
+    try{
+        out = await execute(`vmn show ${app_name}`);
+        core.setOutput("verstr", out.split(/\r?\n/)[0]);
+    } catch (e) {
+        core.setFailed(`Error executing vmn show ${e}`);
+    }    
 }
 
 main().catch(err => {
