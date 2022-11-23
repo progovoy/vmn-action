@@ -33,7 +33,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.0.3
+      uses: progovoy/vmn-action@vmna_0.0.4
       with:
         release-mode: ${{inputs.version_type}}
         app-name: ${{inputs.app_name}}
