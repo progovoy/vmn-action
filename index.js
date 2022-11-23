@@ -6,6 +6,11 @@ const { stdout } = require('process');
 
 const execute = (command) => new Promise((resolve, reject) => {
     childProcess.exec(command, (error, stdout, stderr) => {
+        if (error || stderr) {
+            reject(stderr);
+            return;
+        }
+
         resolve(stdout);
     });
 })
@@ -27,20 +32,20 @@ const main = async() => {
         );
     }
 
-    await execute(`pip install vmn`);
+    try{
+        await execute(`pip install vmn`);
+    } catch (e) {
+        core.setFailed(`Error executing pip install ${e}`);
+    }
     await execute(`vmn init`);
     await execute(`vmn init-app ${app_name}`);
 
-    let out = await execute(`git log`);
-    core.info(`stamp stdout: ${out}`);
-    out = await execute(`git status`);
-    core.info(`stamp stdout: ${out}`);
-    out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
-    core.info(`stamp stdout: ${out}`);
-    out = await execute(`git log`);
-    core.info(`stamp stdout: ${out}`);
-    out = await execute(`git status`);
-    core.info(`stamp stdout: ${out}`);
+    try{
+        let out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
+        core.info(`stamp stdout: ${out}`);
+    } catch (e) {
+        core.setFailed(`Error executing vmn stamp ${e}`);
+    }
 
     out = await execute(`vmn show ${app_name}`);
     core.setOutput("verstr", out.split(/\r?\n/)[0]);
