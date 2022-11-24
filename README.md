@@ -9,6 +9,19 @@ https://github.com/final-israel/vmn
 
 ## Usage
 ```yaml
+- id: foo
+  uses: progovoy/vmn-action@vmna_0.1.0
+  with:
+    release-mode: ${{inputs.version_type}}
+    app-name: ${{inputs.app_name}}
+
+- name: Use the output from vmn action
+  run: |
+    echo "${{steps.foo.outputs.verstr}}"
+```
+
+## Full dummy example
+```yaml
 name: test
 
 on:
@@ -33,7 +46,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.0.4
+      uses: progovoy/vmn-action@vmna_0.1.0
       with:
         release-mode: ${{inputs.version_type}}
         app-name: ${{inputs.app_name}}
