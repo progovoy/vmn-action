@@ -1,4 +1,4 @@
-name: 'automatic-versioning'
+name: 'Automated versioning'
 description: 'vmn based, production grade solution for versioning agnostic to language. Full support for semantic versioning (Semver).'
 branding:
   icon: trending-up
