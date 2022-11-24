@@ -1,5 +1,5 @@
-name: 'Automatic semantic (Semver) versioning'
-description: 'vmn based, production grade solution for automatic versioning agnostic to language. Support for semantic versioning (Semver).'
+name: 'Automated versioning'
+description: 'vmn based, production grade solution for versioning agnostic to language. Full support for semantic versioning (Semver).'
 branding:
   icon: trending-up
   color: green
