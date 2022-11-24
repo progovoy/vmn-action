@@ -1,5 +1,5 @@
-name: 'vmn-versioning'
-description: 'Production grade solution for automatic versioning & state recovery agnostic to language. Support semantic versioning Semver'
+name: 'Automatic git based semantic (Semver) versioning using vmn utility'
+description: 'Production grade solution for automatic versioning agnostic to language. Support for semantic versioning (Semver)'
 branding:
   icon: trending-up
   color: green
