@@ -12,8 +12,8 @@ https://github.com/final-israel/vmn
 - id: foo
   uses: progovoy/vmn-action@vmna_0.1.0
   with:
-    release-mode: ${{inputs.version_type}}
-    app-name: ${{inputs.app_name}}
+    release-mode: minor
+    app-name: my_cool_app
 
 - name: Use the output from vmn action
   run: |
