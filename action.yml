@@ -1,4 +1,4 @@
-name: 'Automatic git based semantic (Semver) versioning using vmn utility'
+name: 'Automatic semantic (Semver) versioning'
 description: 'Production grade solution for automatic versioning agnostic to language. Support for semantic versioning (Semver)'
 branding:
   icon: trending-up
