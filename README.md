@@ -10,7 +10,7 @@ https://github.com/final-israel/vmn
 ## Usage
 ```yaml
 - id: foo
-  uses: progovoy/vmn-action@vmna_0.1.0
+  uses: progovoy/vmn-action@vmna_0.1.5
   with:
     release-mode: minor
     app-name: my_cool_app
@@ -46,7 +46,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.0
+      uses: progovoy/vmn-action@vmna_0.1.5
       with:
         release-mode: ${{inputs.version_type}}
         app-name: ${{inputs.app_name}}
