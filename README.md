@@ -1,4 +1,4 @@
-# vmn-versioning action
+# vmn based automatic versioning action
 Action for Git tag-based automatic `Semver`-compliant versioning utilizing the `vmn` utility    
 
 This action was built for basic use of the `vmn` utility. 
