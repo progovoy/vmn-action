@@ -1,3 +1,5 @@
+[![vmn: automatic versioning](https://img.shields.io/badge/vmn-automatic%20versioning-blue)](https://github.com/final-israel/vmn)
+
 # vmn based automatic versioning action
 Action for Git tag-based automatic `Semver`-compliant versioning utilizing the `vmn` utility    
 
