@@ -23,6 +23,7 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 const main = async() => {
     const release_mode = core.getInput('release-mode');
     const app_name = core.getInput('app-name');
+    const prerelease_name = core.getInput('prerelease-name');
 
     if (!app_name) {
         core.setFailed(
@@ -45,7 +46,16 @@ const main = async() => {
     await execute(`vmn init-app ${app_name}`, skip_error=true);
 
     try{
-        let out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
+        let out;
+        if (release_mode == "prerelease")
+        {
+            out = await execute(`vmn --debug stamp --pr ${prerelease_name} ${app_name}`);
+        }
+        else 
+        {
+            out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
+        }
+        
         core.info(`stamp stdout: ${out}`);
     } catch (e) {
         core.setFailed(`Error executing vmn stamp ${e}`);
