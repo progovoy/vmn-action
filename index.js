@@ -21,19 +21,15 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 
 
 const main = async() => {
-    const release_mode = core.getInput('release-mode');
     const app_name = core.getInput('app-name');
+    const release_mode = core.getInput('release-mode');
+    const prerelease_mode = core.getInput('prerelease-mode');
     const prerelease_name = core.getInput('prerelease-name');
+    const prerelease_stamp = core.getInput('prerelease-stamp');
 
     if (!app_name) {
         core.setFailed(
             `App Name parameter must be suplied`
-        );
-    }
-
-    if (!release_mode) {
-        core.setFailed(
-            `Release mode parameter must be suplied`
         );
     }
 
@@ -47,9 +43,30 @@ const main = async() => {
 
     try{
         let out;
-        if (release_mode == "prerelease")
+        let current_version = await execute(`vmn show ${app_name}`);
+        let current_release_mode = await execute(`vmn show --verbose ${app_name} | grep release_mode | cut -f2 -d" "`);
+        if (prerelease_stamp) 
         {
-            out = await execute(`vmn --debug stamp --pr ${prerelease_name} ${app_name}`);
+            if (current_release_mode == "prerelease")
+            {
+                out = await execute(`vmn --debug release -v ${current_version} ${app_name}`);
+            }
+            else
+            {
+                out = "Can't make release of non-prerelease version";
+            }
+            
+        }
+        else if (prerelease_mode)
+        {
+            if (current_release_mode == "prerelease")
+            {
+                out = await execute(`vmn --debug stamp --pr ${prerelease_name} ${app_name}`);
+            }
+            else
+            {
+                out = await execute(`vmn --debug stamp -r patch --pr ${prerelease_name} ${app_name}`);
+            }
         }
         else 
         {
