@@ -83,7 +83,8 @@ jobs:
     - id: foo
       uses: progovoy/vmn-action@vmna_0.1.9
       with:
-        release-mode: prerelease
+        prerelease-mode: true # Set either prerelease-mode (will create patch prerelease if this is the first prerelease) or release-mode for normal stamping
+        prerelease-stamp: false # Set true only when you want to release the prerelease version  
         prerelease-name: ${{inputs.prerelease_name}}
         app-name: ${{inputs.app_name}}
      
