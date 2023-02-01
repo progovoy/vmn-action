@@ -25,7 +25,7 @@ https://github.com/final-israel/vmn
     echo "${{steps.foo.outputs.verstr}}"
 ```
 
-## Full dummy example
+## Full Dummy Example Without Prerelease Mode
 ```yaml
 name: test
 
@@ -62,7 +62,7 @@ jobs:
 
  ```
 
- ## Full dummy example With Prerelease Mode
+ ## Full Dummy Example With Prerelease Mode
 ```yaml
 name: test
 
@@ -85,6 +85,7 @@ jobs:
     - id: foo
       uses: progovoy/vmn-action@vmna_0.1.9
       with:
+        # stamp-mode should not be provided now
         prerelease-mode: true
         release: false
         prerelease-name: ${{inputs.prerelease_name}}
