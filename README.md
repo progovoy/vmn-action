@@ -39,7 +39,6 @@ on:
         - patch
         - minor
         - major
-        - prerelease
         required: true
       app_name:
         description: App name
