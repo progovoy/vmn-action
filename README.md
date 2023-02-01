@@ -14,7 +14,7 @@ https://github.com/final-israel/vmn
 - id: foo
   uses: progovoy/vmn-action@vmna_0.1.9
   with:
-    stamp-mode: {major, minor, patch} 
+    stamp-mode: {major, minor, patch}   # stamp-mode will be default to "patch", but could be provided for different stamp-mode
     prerelease-mode: <Boolean>          # Set either prerelease-mode (will create patch prerelease if this is the first prerelease) or stamp-mode for normal stamping
     release: <Boolean>                  # Set true only when you want to release the prerelease version  
     prerelease-name: <PRERELEASE_NAME>
@@ -85,7 +85,6 @@ jobs:
     - id: foo
       uses: progovoy/vmn-action@vmna_0.1.9
       with:
-        # stamp-mode should not be provided now
         prerelease-mode: true
         release: false
         prerelease-name: ${{inputs.prerelease_name}}
