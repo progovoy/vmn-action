@@ -22,10 +22,10 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 
 const main = async() => {
     const app_name = core.getInput('app-name');
-    const release_mode = core.getInput('release-mode');
+    const stamp_mode = core.getInput('stamp-mode');
     const prerelease_mode = core.getInput('prerelease-mode');
     const prerelease_name = core.getInput('prerelease-name');
-    const prerelease_stamp = core.getInput('prerelease-stamp');
+    const release = core.getInput('release');
 
     if (!app_name) {
         core.setFailed(
@@ -45,7 +45,7 @@ const main = async() => {
         let out;
         let current_version = await execute(`vmn show ${app_name}`);
         let current_release_mode = await execute(`vmn show --type ${app_name} | grep release_mode | cut -f2 -d" "`);
-        if (prerelease_stamp) 
+        if (release) 
         {
             if (current_release_mode == "prerelease")
             {
@@ -70,13 +70,13 @@ const main = async() => {
         }
         else 
         {
-            if (release_mode != "")
+            if (stamp_mode != "")
             {
-                out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
+                out = await execute(`vmn --debug stamp -r ${stamp_mode} ${app_name}`);
             }
             else 
             {
-                out = "prerelease_stamp, release_mode, or prerelease_mode must be provided"
+                out = "release, stamp_mode, or prerelease_mode must be provided"
             }
         }
         

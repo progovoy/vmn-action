@@ -14,8 +14,11 @@ https://github.com/final-israel/vmn
 - id: foo
   uses: progovoy/vmn-action@vmna_0.1.9
   with:
-    release-mode: minor
-    app-name: my_cool_app
+    stamp-mode: {major, minor, patch} 
+    prerelease-mode: <Boolean>          # Set either prerelease-mode (will create patch prerelease if this is the first prerelease) or stamp-mode for normal stamping
+    release: <Boolean>                  # Set true only when you want to release the prerelease version  
+    prerelease-name: <PRERELEASE_NAME>
+    app-name: <APP_NAME>
 
 - name: Use the output from vmn action
   run: |
@@ -51,7 +54,7 @@ jobs:
     - id: foo
       uses: progovoy/vmn-action@vmna_0.1.9
       with:
-        release-mode: ${{inputs.version_type}}
+        stamp-mode: ${{inputs.version_type}}
         app-name: ${{inputs.app_name}}
      
     - name: Use the output from vmn action
@@ -83,8 +86,8 @@ jobs:
     - id: foo
       uses: progovoy/vmn-action@vmna_0.1.9
       with:
-        prerelease-mode: true # Set either prerelease-mode (will create patch prerelease if this is the first prerelease) or release-mode for normal stamping
-        prerelease-stamp: false # Set true only when you want to release the prerelease version  
+        prerelease-mode: true
+        release: false
         prerelease-name: ${{inputs.prerelease_name}}
         app-name: ${{inputs.app_name}}
      
