@@ -44,7 +44,7 @@ const main = async() => {
     try{
         let out;
         let current_version = await execute(`vmn show ${app_name}`);
-        let current_release_mode = await execute(`vmn show --verbose ${app_name} | grep release_mode | cut -f2 -d" "`);
+        let current_release_mode = await execute(`vmn show --type ${app_name} | grep release_mode | cut -f2 -d" "`);
         if (prerelease_stamp) 
         {
             if (current_release_mode == "prerelease")
@@ -70,7 +70,14 @@ const main = async() => {
         }
         else 
         {
-            out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
+            if (release_mode != "")
+            {
+                out = await execute(`vmn --debug stamp -r ${release_mode} ${app_name}`);
+            }
+            else 
+            {
+                out = "prerelease_stamp, release_mode, or prerelease_mode must be provided"
+            }
         }
         
         core.info(`stamp stdout: ${out}`);
