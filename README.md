@@ -14,18 +14,19 @@ https://github.com/final-israel/vmn
 - id: foo
   uses: progovoy/vmn-action@vmna_0.1.9
   with:
-    stamp-mode: {major, minor, patch}   # stamp-mode will be default to "patch", but could be provided for different stamp-mode
-    prerelease-mode: <Boolean>          # Set either prerelease-mode (will create patch prerelease if this is the first prerelease) or stamp-mode for normal stamping
-    release: <Boolean>                  # Set true only when you want to release the prerelease version  
-    prerelease-name: <PRERELEASE_NAME>
-    app-name: <APP_NAME>
+    stamp-mode: {major, minor, patch}   # Default value is "patch"
+    release-candidate: <Boolean>        # Set either release-candidate (will create patch release-candidate if this is the first release-candidate) 
+                                        #   or stamp-mode for normal stamping
+    release: <Boolean>                  # Set true only when you want to release the release-candidate version  
+    prerelease-name: <PRERELEASE_NAME>  # Default value is "rc"
+    app-name: <APP_NAME>                # Must be provided
 
 - name: Use the output from vmn action
   run: |
     echo "${{steps.foo.outputs.verstr}}"
 ```
 
-## Full Dummy Example Without Prerelease Mode
+## Full Dummy Example Without Release Candidate Mode
 ```yaml
 name: test
 
@@ -62,7 +63,7 @@ jobs:
 
  ```
 
- ## Full Dummy Example With Prerelease Mode
+ ## Full Dummy Example With Release Candidate Mode
 ```yaml
 name: test
 
@@ -71,7 +72,6 @@ on:
     inputs:
       prerelease_name:
         description: Prerelease name
-        required: true
       app_name:
         description: App name
         required: true
@@ -85,7 +85,7 @@ jobs:
     - id: foo
       uses: progovoy/vmn-action@vmna_0.1.9
       with:
-        prerelease-mode: true
+        release-candidate: true
         release: false
         prerelease-name: ${{inputs.prerelease_name}}
         app-name: ${{inputs.app_name}}

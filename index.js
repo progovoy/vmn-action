@@ -23,7 +23,7 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 const main = async() => {
     const app_name = core.getInput('app-name');
     const stamp_mode = core.getInput('stamp-mode');
-    const prerelease_mode = core.getInput('prerelease-mode');
+    const release_candidate = core.getInput('release-candidate');
     const prerelease_name = core.getInput('prerelease-name');
     const release = core.getInput('release');
 
@@ -45,10 +45,17 @@ const main = async() => {
         let out;
         let current_version = await execute(`vmn show ${app_name}`);
         let current_release_mode = await execute(`vmn show --type ${app_name} | grep release_mode | cut -f2 -d" "`);
-        if (stamp_mode != "")
+        
+        if (stamp_mode == "")
         {
             stamp_mode = "patch";
         }
+
+        if (prerelease_name == "") 
+        {
+            prerelease_name = "rc"
+        }
+
         if (release) 
         {
             if (current_release_mode == "prerelease")
@@ -61,7 +68,7 @@ const main = async() => {
             }
             
         }
-        else if (prerelease_mode)
+        else if (release_candidate)
         {
             if (current_release_mode == "prerelease")
             {
