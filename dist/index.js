@@ -9760,7 +9760,7 @@ const main = async() => {
 
         if (release === "true") 
         {
-            if (current_release_mode === "prerelease")
+            if (current_release_mode.includes("prerelease"))
             {
                 out = await execute(`vmn --debug release ${app_name}`);
             }
@@ -9772,7 +9772,7 @@ const main = async() => {
         }
         else if (release_candidate === "true")
         {
-            if (current_release_mode === "prerelease")
+            if (current_release_mode.includes("prerelease"))
             {
                 out = await execute(`vmn --debug stamp --pr ${prerelease_name} ${app_name}`);
             }
