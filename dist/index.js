@@ -9750,9 +9750,7 @@ const main = async() => {
 
     try{
         let out;
-        let current_version = await execute(`vmn show ${app_name}`);
-        let current_release_mode = await execute(`vmn show --type ${app_name} | grep release_mode | cut -f2 -d" "`);
-        core.info(`current_version: ${current_version}`);
+        let current_release_mode = await execute(`vmn show --verbose ${app_name} | grep release_mode | cut -f2 -d" "`);
         core.info(`current_release_mode: ${current_release_mode}`);
         if (stamp_mode == "")
         {
@@ -9764,11 +9762,11 @@ const main = async() => {
             prerelease_name = "rc"
         }
 
-        if (release) 
+        if (release == "true") 
         {
             if (current_release_mode == "prerelease")
             {
-                out = await execute(`vmn --debug release -v ${current_version} ${app_name}`);
+                out = await execute(`vmn --debug release ${app_name}`);
             }
             else
             {
@@ -9776,7 +9774,7 @@ const main = async() => {
             }
             
         }
-        else if (release_candidate)
+        else if (release_candidate == "true")
         {
             if (current_release_mode == "prerelease")
             {
