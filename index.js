@@ -26,6 +26,11 @@ const main = async() => {
     const release_candidate = core.getInput('release-candidate');
     const prerelease_name = core.getInput('prerelease-name');
     const release = core.getInput('release');
+    core.info(`app_name: ${app_name}`);
+    core.info(`stamp_mode: ${stamp_mode}`);
+    core.info(`release_candidate: ${release_candidate}`);
+    core.info(`prerelease_name: ${prerelease_name}`);
+    core.info(`release: ${release}`);
 
     if (!app_name) {
         core.setFailed(
@@ -45,7 +50,8 @@ const main = async() => {
         let out;
         let current_version = await execute(`vmn show ${app_name}`);
         let current_release_mode = await execute(`vmn show --type ${app_name} | grep release_mode | cut -f2 -d" "`);
-        
+        core.info(`current_version: ${current_version}`);
+        core.info(`current_release_mode: ${current_release_mode}`);
         if (stamp_mode == "")
         {
             stamp_mode = "patch";

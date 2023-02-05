@@ -4,15 +4,24 @@ branding:
   icon: trending-up
   color: green
 inputs:
-  release-mode:
+  stamp-mode:
     type: choice
-    description: Desired Release Mode
+    description: Desired Stamp Mode
     options:
       - major
       - minor
       - patch
-    required: true
     default: patch
+  release-candidate: 
+    type: boolean
+    description: Is it Release Candidate?
+  prerelease-name:
+    type: string
+    description: Prerelease Name
+    default: rc
+  release: 
+    type: boolean
+    description: Is it ready to be released?
   app-name:
     description: "Name of the app to stamp"
     required: true
