@@ -9752,19 +9752,15 @@ const main = async() => {
         let out;
         let current_release_mode = await execute(`vmn show --verbose ${app_name} | grep release_mode | cut -f2 -d" "`);
         core.info(`current_release_mode: ${current_release_mode}`);
-        if (stamp_mode == "")
-        {
-            stamp_mode = "patch";
-        }
 
-        if (prerelease_name == "") 
+        if (prerelease_name === "") 
         {
             prerelease_name = "rc"
         }
 
-        if (release == "true") 
+        if (release === "true") 
         {
-            if (current_release_mode == "prerelease")
+            if (current_release_mode === "prerelease")
             {
                 out = await execute(`vmn --debug release ${app_name}`);
             }
@@ -9774,20 +9770,31 @@ const main = async() => {
             }
             
         }
-        else if (release_candidate == "true")
+        else if (release_candidate === "true")
         {
-            if (current_release_mode == "prerelease")
+            if (current_release_mode === "prerelease")
             {
                 out = await execute(`vmn --debug stamp --pr ${prerelease_name} ${app_name}`);
             }
-            else
+            else if (stamp_mode in ["major", "minor", "patch"])
             {
                 out = await execute(`vmn --debug stamp -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
+            }
+            else
+            {
+                out = "stamp-mode must be provided for first prerelease (major, minor, or patch)";
             }
         }
         else 
         {
-            out = await execute(`vmn --debug stamp -r ${stamp_mode} ${app_name}`);
+            if (stamp_mode in ["major", "minor", "patch"])
+            {
+                out = await execute(`vmn --debug stamp -r ${stamp_mode} ${app_name}`);
+            }
+            else
+            {
+                out = "Invaild stamp-mode (major, minor, or patch)";
+            }
         }
         
         core.info(`stamp stdout: ${out}`);
