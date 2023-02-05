@@ -12,7 +12,7 @@ https://github.com/final-israel/vmn
 ## Usage
 ```yaml
 - id: foo
-  uses: progovoy/vmn-action@vmna_0.1.9
+  uses: progovoy/vmn-action@vmna_0.1.10
   with:
     stamp-mode: {major, minor, patch}   # Default value is "patch"
     release-candidate: <Boolean>        # Set either release-candidate (will create patch release-candidate if this is the first release-candidate) 
@@ -52,7 +52,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.9
+      uses: progovoy/vmn-action@vmna_0.1.10
       with:
         stamp-mode: ${{inputs.version_type}}
         app-name: ${{inputs.app_name}}
@@ -83,7 +83,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.9
+      uses: progovoy/vmn-action@vmna_0.1.10
       with:
         release-candidate: true
         release: false
