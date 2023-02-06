@@ -9766,7 +9766,7 @@ const main = async() => {
             }
             else
             {
-                out = "Can't make release of non-prerelease version";
+                core.setFailed("Can't make release of non-prerelease version");
             }
             
         }
@@ -9776,24 +9776,24 @@ const main = async() => {
             {
                 out = await execute(`vmn --debug stamp --pr ${prerelease_name} ${app_name}`);
             }
-            else if (stamp_mode in ["major", "minor", "patch"])
+            else if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
             {
                 out = await execute(`vmn --debug stamp -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
             }
             else
             {
-                out = "stamp-mode must be provided for first prerelease (major, minor, or patch)";
+                core.setFailed("stamp-mode must be provided for first prerelease (major, minor, or patch)");
             }
         }
         else 
         {
-            if (stamp_mode in ["major", "minor", "patch"])
+            if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
             {
                 out = await execute(`vmn --debug stamp -r ${stamp_mode} ${app_name}`);
             }
             else
             {
-                out = "Invaild stamp-mode (major, minor, or patch)";
+                core.setFailed("Invaild stamp-mode (major, minor, or patch)");
             }
         }
         
