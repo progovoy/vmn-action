@@ -13833,6 +13833,8 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 const fail = async (msg) => {
     out = await execute(`cat .vmn/vmn.log`);
     core.info(`failed vmn. vmn log: ${out}`);
+    out = await execute(`git remote show origin`);
+    core.info(`fgit remote show origin: ${out}`);
     core.setFailed(msg);
 }
 
