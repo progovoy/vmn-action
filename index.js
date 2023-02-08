@@ -50,20 +50,18 @@ const main = async () => {
     } catch (e) {
         await fail(`Error executing pip install ${e}`);
     }
-    out = await execute(`vmn init`, skip_error=true);
-    core.info(`vmn init stdout: ${out}`);
-    out = await execute(`vmn init-app ${app_name}`, skip_error=true);
-    core.info(`vmn init-app stdout: ${out}`);
+    await execute(`vmn init`, skip_error=true);
+    await execute(`vmn init-app ${app_name}`, skip_error=true);
 
     try{
         let out;
         let show_result = await execute(`vmn show --verbose ${app_name}`);
         let show_result_obj = YAML.load(show_result);
-        core.info(`current_release_mode: ${current_release_mode}`);
+        core.info(`show_result_obj["release_mode"]: ${show_result_obj["release_mode"]}`);
 
         if (prerelease_name === "") 
         {
-            prerelease_name = "rc"
+            prerelease_name = "rc";
         }
 
         if (release === "true") 
@@ -80,7 +78,7 @@ const main = async () => {
         }
         else if (release_candidate === "true")
         {
-            if (current_release_mode.includes("prerelease"))
+            if (show_result_obj["release_mode"].includes("prerelease"))
             {
                 out = await execute(`vmn --debug stamp --pr ${prerelease_name} ${app_name}`);
             }
