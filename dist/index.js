@@ -13850,7 +13850,7 @@ const main = async () => {
     core.info(`release: ${release}`);
 
     if (!app_name) {
-        core.setFailed(
+        await fail(
             `App Name parameter must be suplied`
         );
     }
@@ -13858,7 +13858,7 @@ const main = async () => {
     try{
         await execute(`pip install vmn`);
     } catch (e) {
-        fail(`Error executing pip install ${e}`);
+        await fail(`Error executing pip install ${e}`);
     }
     out = await execute(`vmn init`, skip_error=true);
     core.info(`vmn init stdout: ${out}`);
@@ -13884,7 +13884,7 @@ const main = async () => {
             }
             else
             {
-                fail("Can't make release of non-prerelease version");
+                await fail("Can't make release of non-prerelease version");
             }
             
         }
@@ -13900,7 +13900,7 @@ const main = async () => {
             }
             else
             {
-                fail("stamp-mode must be provided for first prerelease (major, minor, or patch)");
+                await fail("stamp-mode must be provided for first prerelease (major, minor, or patch)");
             }
         }
         else 
@@ -13911,20 +13911,20 @@ const main = async () => {
             }
             else
             {
-                fail("Invaild stamp-mode (major, minor, or patch)");
+                await fail("Invaild stamp-mode (major, minor, or patch)");
             }
         }
         
         core.info(`stamp stdout: ${out}`);
     } catch (e) {
-        fail(`Error executing vmn stamp ${e}`);
+        await fail(`Error executing vmn stamp ${e}`);
     }
 
     try{
         out = await execute(`vmn show ${app_name}`);
         core.setOutput("verstr", out.split(/\r?\n/)[0]);
     } catch (e) {
-        fail(`Error executing vmn show ${e}`);
+        await fail(`Error executing vmn show ${e}`);
     }    
 }
 
