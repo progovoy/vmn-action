@@ -6,7 +6,8 @@
     "dependencies": {
         "@actions/core": "^1.10.0",
         "@actions/github": "^5.1.1",
-        "@vercel/ncc": "^0.34.0"
+        "@vercel/ncc": "^0.34.0",
+        "js-yaml": "^4.1.0"
     },
     "description": "",
     "homepage": "https://github.com/progovoy/vmn-stamp-action.git#readme",
@@ -19,7 +20,7 @@
         "url": "git+https://github.com/progovoy/vmn-stamp-action.git"
     },
     "scripts": {
-        "postinstall": "pip install vmn",
+        "postinstall": "python3 -m pip install vmn",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "version": "0.6.22"
