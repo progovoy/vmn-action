@@ -21,11 +21,11 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 
 
 const main = async() => {
-    const app_name = core.getInput('app-name');
-    const stamp_mode = core.getInput('stamp-mode');
-    const release_candidate = core.getInput('release-candidate');
-    const prerelease_name = core.getInput('prerelease-name');
-    const release = core.getInput('release');
+    let app_name = core.getInput('app-name');
+    let stamp_mode = core.getInput('stamp-mode');
+    let release_candidate = core.getInput('release-candidate');
+    let prerelease_name = core.getInput('prerelease-name');
+    let release = core.getInput('release');
     core.info(`app_name: ${app_name}`);
     core.info(`stamp_mode: ${stamp_mode}`);
     core.info(`release_candidate: ${release_candidate}`);
@@ -43,8 +43,10 @@ const main = async() => {
     } catch (e) {
         core.setFailed(`Error executing pip install ${e}`);
     }
-    await execute(`vmn init`, skip_error=true);
-    await execute(`vmn init-app ${app_name}`, skip_error=true);
+    out = await execute(`vmn init`, skip_error=true);
+    core.info(`vmn init stdout: ${out}`);
+    out = await execute(`vmn init-app ${app_name}`, skip_error=true);
+    core.info(`vmn init-app stdout: ${out}`);
 
     try{
         let out;
