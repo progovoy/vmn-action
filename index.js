@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const childProcess = require("child_process");
+const YAML = require('js-yaml');
 const { promises: fs } = require("fs");
 const { stdout } = require('process');
 
@@ -19,8 +20,14 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
     });
 })
 
+const fail = async (msg) => {
+    out = await execute(`cat .vmn/vmn.log`);
+    core.info(`failed vmn. vmn log: ${out}`);
+    core.setFailed(msg);
+}
 
-const main = async() => {
+
+const main = async () => {
     let app_name = core.getInput('app-name');
     let stamp_mode = core.getInput('stamp-mode');
     let release_candidate = core.getInput('release-candidate');
@@ -41,7 +48,7 @@ const main = async() => {
     try{
         await execute(`pip install vmn`);
     } catch (e) {
-        core.setFailed(`Error executing pip install ${e}`);
+        fail(`Error executing pip install ${e}`);
     }
     out = await execute(`vmn init`, skip_error=true);
     core.info(`vmn init stdout: ${out}`);
@@ -50,7 +57,8 @@ const main = async() => {
 
     try{
         let out;
-        let current_release_mode = await execute(`vmn show --verbose ${app_name} | grep release_mode | cut -f2 -d" "`);
+        let show_result = await execute(`vmn show --verbose ${app_name}`);
+        let show_result_obj = YAML.load(show_result);
         core.info(`current_release_mode: ${current_release_mode}`);
 
         if (prerelease_name === "") 
@@ -60,13 +68,13 @@ const main = async() => {
 
         if (release === "true") 
         {
-            if (current_release_mode.includes("prerelease"))
+            if (show_result_obj["release_mode"].includes("prerelease"))
             {
                 out = await execute(`vmn --debug release ${app_name}`);
             }
             else
             {
-                core.setFailed("Can't make release of non-prerelease version");
+                fail("Can't make release of non-prerelease version");
             }
             
         }
@@ -82,7 +90,7 @@ const main = async() => {
             }
             else
             {
-                core.setFailed("stamp-mode must be provided for first prerelease (major, minor, or patch)");
+                fail("stamp-mode must be provided for first prerelease (major, minor, or patch)");
             }
         }
         else 
@@ -93,20 +101,20 @@ const main = async() => {
             }
             else
             {
-                core.setFailed("Invaild stamp-mode (major, minor, or patch)");
+                fail("Invaild stamp-mode (major, minor, or patch)");
             }
         }
         
         core.info(`stamp stdout: ${out}`);
     } catch (e) {
-        core.setFailed(`Error executing vmn stamp ${e}`);
+        fail(`Error executing vmn stamp ${e}`);
     }
 
     try{
         out = await execute(`vmn show ${app_name}`);
         core.setOutput("verstr", out.split(/\r?\n/)[0]);
     } catch (e) {
-        core.setFailed(`Error executing vmn show ${e}`);
+        fail(`Error executing vmn show ${e}`);
     }    
 }
 
