@@ -5,6 +5,8 @@ const YAML = require('js-yaml');
 const { promises: fs } = require("fs");
 const { stdout } = require('process');
 
+let out;
+
 const execute = (command, skip_error=false) => new Promise((resolve, reject) => {
     childProcess.exec(command, (error, stdout, stderr) => {
         if ((error || stderr) && !skip_error) {
@@ -21,8 +23,15 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 })
 
 const fail = async (msg) => {
-    out = await execute(`[ -f .vmn/vmn.log ] && cat .vmn/vmn.log`);
-    core.info(`failed vmn. vmn log: ${out}`);
+    out = await execute(`[ -f /etc/resolv.conf ] && echo 1 || echo 0`);
+    if (out == "1")
+    {
+        core.info(`error 1`);
+        out = await execute(`cat .vmn/vmn.log`);
+        core.info(`error 2`);
+        core.info(`failed vmn. vmn log: ${out}`);
+    }
+    core.info(`error 3`);
     core.setFailed(`Error Massage: ${msg}`);
 }
 
@@ -102,7 +111,6 @@ const main = async () => {
     await execute(`vmn init-app ${app_name}`, skip_error=true);
 
     try{
-        let out;
         let show_result = await execute(`vmn show --verbose ${app_name}`);
         let show_result_obj = YAML.load(show_result);
         core.info(`show_result_obj["release_mode"]: ${show_result_obj["release_mode"]}`);
