@@ -13850,10 +13850,11 @@ const main = async () => {
     core.info(`release_candidate: ${release_candidate}`);
     core.info(`prerelease_name: ${prerelease_name}`);
     core.info(`release: ${release}`);
+    let protected = false;
+    let new_pull_number = 0;
 
     token = process.env.GITHUB_TOKEN
-    core.info(`process.env token: ${token}`);
-    if (token == "undefined")
+    if (token == undefined)
     {
         await fail(
             `Github Token Must Be Supplied As Env Variable`
@@ -13862,7 +13863,6 @@ const main = async () => {
     const octokit = github.getOctokit(token);
     
     const username = github.context.actor;
-    core.info(`username: ${username}`);
     const permission_response = await octokit.rest.repos.getCollaboratorPermissionLevel({
         ...github.context.repo,
         username: username
@@ -13871,19 +13871,20 @@ const main = async () => {
     let permission = permission_response.data.permission;
     
     core.info(`permission: ${permission}`);
-    if (permission != "write")
+    if (permission != "write" && permission != "admin")
     {
         await fail(
             `Action must have write permission`
         );
     }
 
-    const protection_response = await octokit.rest.repos.getBranchProtection({
-        ...github.context.repo,
-        username: username
+    const protection_response = await octokit.rest.actions.getGithubActionsDefaultWorkflowPermissionsRepository({
+        ...github.context.repo
       });
 
-    let protection = protection_response.data.enabled;
+    let protection = protection_response.data.can_approve_pull_request_reviews;
+
+    // If protected branch than create new branch and work from there. In the end, marge the pull request to the original branch
 
     core.info(`protection: ${protection}`);
 
@@ -13949,6 +13950,19 @@ const main = async () => {
             {
                 await fail("Invaild stamp-mode (major, minor, or patch)");
             }
+        }
+
+        if (protected)
+        {
+            // If protected than marge new pull request from created branch to the original branch
+            const marge_response = await octokit.rest.pulls.merge({
+                ...github.context.repo,
+                pull_number: new_pull_number
+              });
+
+            let marge = protection_response.data.merged;
+
+            core.info(`marge: ${marge}`);
         }
         
         core.info(`stamp stdout: ${out}`);
