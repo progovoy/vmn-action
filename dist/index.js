@@ -13850,28 +13850,34 @@ const main = async () => {
     core.info(`release: ${release}`);
     let protected = false;
     let new_pull_number = 0;
-
+    core.info(`step 1`);
     let token = core.getInput('token');
+    core.info(`step 2`);
     if (token == "")
     {
+        core.info(`step 3`);
         token = process.env.GITHUB_TOKEN
+        core.info(`step 4`);
         if (token == undefined)
         {
+            core.info(`step 5`);
             await fail(
                 "Github Token Must Be Supplied As Env Variable"
             );
         }
     }
+    core.info(`step 6`);
     const octokit = github.getOctokit(token);
     
+    core.info(`step 7`);
     const username = github.context.actor;
     const permission_response = await octokit.rest.repos.getCollaboratorPermissionLevel({
         ...github.context.repo,
         username: username
       });
-
+      core.info(`step 8`);
     let permission = permission_response.data.permission;
-    
+    core.info(`step 9`);
     core.info(`permission: ${permission}`);
     if (permission != "write" && permission != "admin")
     {
@@ -13879,13 +13885,14 @@ const main = async () => {
             "Action must have write permission"
         );
     }
+    core.info(`step 10`);
 
     const protection_response = await octokit.rest.actions.getGithubActionsDefaultWorkflowPermissionsRepository({
         ...github.context.repo
       });
-
+      core.info(`step 11`);
     let protection = protection_response.data.can_approve_pull_request_reviews;
-
+    core.info(`step 12`);
     // If protected branch than create new branch and work from there. In the end, marge the pull request to the original branch
 
     core.info(`protection: ${protection}`);
