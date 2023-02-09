@@ -13853,7 +13853,7 @@ const main = async () => {
 
     token = process.env.GITHUB_TOKEN
     core.info(`process.env token: ${token}`);
-    if (token == "")
+    if (token == "undefined")
     {
         await fail(
             `Github Token Must Be Supplied As Env Variable`
@@ -13861,7 +13861,8 @@ const main = async () => {
     }
     const octokit = github.getOctokit(token);
     
-
+    const username = github.context.actor;
+    core.info(`username: ${username}`);
     const permission_response = await octokit.rest.repos.getCollaboratorPermissionLevel({
         ...github.context.repo,
         username: username
