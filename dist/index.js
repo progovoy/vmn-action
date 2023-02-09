@@ -13815,6 +13815,8 @@ const YAML = __nccwpck_require__(5089);
 const { promises: fs } = __nccwpck_require__(7147);
 const { stdout } = __nccwpck_require__(7282);
 
+const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+
 const execute = (command, skip_error=false) => new Promise((resolve, reject) => {
     childProcess.exec(command, (error, stdout, stderr) => {
         if ((error || stderr) && !skip_error) {
@@ -13834,7 +13836,7 @@ const fail = async (msg) => {
     out = await execute(`cat .vmn/vmn.log`);
     core.info(`failed vmn. vmn log: ${out}`);
     out = await execute(`git remote show origin`);
-    core.info(`fgit remote show origin: ${out}`);
+    core.info(`git remote show origin: ${out}`);
     core.setFailed(msg);
 }
 
@@ -13850,6 +13852,30 @@ const main = async () => {
     core.info(`release_candidate: ${release_candidate}`);
     core.info(`prerelease_name: ${prerelease_name}`);
     core.info(`release: ${release}`);
+
+    const permission_response = await octokit.rest.repos.getCollaboratorPermissionLevel({
+        ...github.context.repo,
+        username: username
+      });
+
+    let permission = permission_response.data.permission;
+    
+    core.info(`permission: ${permission}`);
+    if (permission != "write")
+    {
+        await fail(
+            `Action must have write permission`
+        );
+    }
+
+    const protection_response = await octokit.rest.repos.getBranchProtection({
+        ...github.context.repo,
+        username: username
+      });
+
+    let protection = protection_response.data.enabled;
+
+    core.info(`protection: ${protection}`);
 
     if (!app_name) {
         await fail(
@@ -13880,7 +13906,7 @@ const main = async () => {
         {
             if (show_result_obj["release_mode"].includes("prerelease"))
             {
-                out = await execute(`vmn --debug release ${app_name}`);
+                out = await execute(`vmn release ${app_name}`);
             }
             else
             {
@@ -13892,11 +13918,11 @@ const main = async () => {
         {
             if (show_result_obj["release_mode"].includes("prerelease"))
             {
-                out = await execute(`vmn --debug stamp --pr ${prerelease_name} ${app_name}`);
+                out = await execute(`vmn stamp --pr ${prerelease_name} ${app_name}`);
             }
             else if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
             {
-                out = await execute(`vmn --debug stamp -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
+                out = await execute(`vmn stamp -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
             }
             else
             {
@@ -13907,7 +13933,7 @@ const main = async () => {
         {
             if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
             {
-                out = await execute(`vmn --debug stamp -r ${stamp_mode} ${app_name}`);
+                out = await execute(`vmn stamp -r ${stamp_mode} ${app_name}`);
             }
             else
             {
