@@ -23,7 +23,7 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 const fail = async (msg) => {
     out = await execute(`[ -f .vmn/vmn.log ] && cat .vmn/vmn.log`);
     core.info(`failed vmn. vmn log: ${out}`);
-    core.setFailed(msg);
+    core.setFailed(`Error Massage: ${msg}`);
 }
 
 
@@ -41,12 +41,16 @@ const main = async () => {
     let protected = false;
     let new_pull_number = 0;
 
-    token = process.env.GITHUB_TOKEN
-    if (token == undefined)
+    let token = core.getInput('token');
+    if (token == "")
     {
-        await fail(
-            `Github Token Must Be Supplied As Env Variable`
-        );
+        token = process.env.GITHUB_TOKEN
+        if (token == undefined)
+        {
+            await fail(
+                "Github Token Must Be Supplied As Env Variable"
+            );
+        }
     }
     const octokit = github.getOctokit(token);
     
@@ -62,7 +66,7 @@ const main = async () => {
     if (permission != "write" && permission != "admin")
     {
         await fail(
-            `Action must have write permission`
+            "Action must have write permission"
         );
     }
 
@@ -78,7 +82,7 @@ const main = async () => {
 
     if (!app_name) {
         await fail(
-            `App Name parameter must be suplied`
+            "App Name parameter must be suplied"
         );
     }
 
