@@ -13815,8 +13815,6 @@ const YAML = __nccwpck_require__(5089);
 const { promises: fs } = __nccwpck_require__(7147);
 const { stdout } = __nccwpck_require__(7282);
 
-const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-
 const execute = (command, skip_error=false) => new Promise((resolve, reject) => {
     childProcess.exec(command, (error, stdout, stderr) => {
         if ((error || stderr) && !skip_error) {
@@ -13852,6 +13850,17 @@ const main = async () => {
     core.info(`release_candidate: ${release_candidate}`);
     core.info(`prerelease_name: ${prerelease_name}`);
     core.info(`release: ${release}`);
+
+    token = process.env.GITHUB_TOKEN
+    core.info(`process.env token: ${token}`);
+    if (token == "")
+    {
+        await fail(
+            `Github Token Must Be Supplied As Env Variable`
+        );
+    }
+    const octokit = github.getOctokit(token);
+    
 
     const permission_response = await octokit.rest.repos.getCollaboratorPermissionLevel({
         ...github.context.repo,
