@@ -13843,6 +13843,7 @@ const fail = async (msg) => {
     }
     core.info(`error 3`);
     core.setFailed(`Error Massage: ${msg}`);
+    process.exit(err.code || -1);
 }
 
 
