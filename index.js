@@ -21,10 +21,8 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 })
 
 const fail = async (msg) => {
-    out = await execute(`cat .vmn/vmn.log`);
+    out = await execute(`[ -f .vmn/vmn.log ] && cat .vmn/vmn.log`);
     core.info(`failed vmn. vmn log: ${out}`);
-    out = await execute(`git remote show origin`);
-    core.info(`git remote show origin: ${out}`);
     core.setFailed(msg);
 }
 
