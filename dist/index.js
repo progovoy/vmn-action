@@ -13887,11 +13887,11 @@ const main = async () => {
     }
     core.info(`step 1`);
 
-    const protection_response = await octokit.rest.pulls.list({
+    const protection_response = await octokit.rest.actions.getGithubActionsPermissionsRepository({
         ...github.context.repo
       });
       core.info(`step 2`);
-    let protection = protection_response.data.can_approve_pull_request_reviews;
+    let protection = protection_response.data.allowed_actions;
     core.info(`step 3`);
     // If protected branch than create new branch and work from there. In the end, marge the pull request to the original branch
 
