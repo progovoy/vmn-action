@@ -26,12 +26,9 @@ const fail = async (msg) => {
     out = await execute(`[ -f /etc/resolv.conf ] && echo 1 || echo 0`);
     if (out == "1")
     {
-        core.info(`error 1`);
         out = await execute(`cat .vmn/vmn.log`);
-        core.info(`error 2`);
         core.info(`failed vmn. vmn log: ${out}`);
     }
-    core.info(`error 3`);
     core.setFailed(`Error Massage: ${msg}`);
     process.exit(-1);
 }
@@ -81,7 +78,7 @@ const main = async () => {
         ...github.context.repo
       });
       core.info(`step 2`);
-    let protection = protection_response.data.allowed_actions;
+    let protection = protection_response.data.can_approve_pull_request_reviews;
     core.info(`step 3`);
     // If protected branch than create new branch and work from there. In the end, marge the pull request to the original branch
 
