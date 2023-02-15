@@ -7,7 +7,8 @@
         "@actions/core": "^1.10.0",
         "@actions/github": "^5.1.1",
         "@vercel/ncc": "^0.34.0",
-        "js-yaml": "^4.1.0"
+        "js-yaml": "^4.1.0",
+        "node-git-current-branch": "^2.0.1"
     },
     "description": "",
     "homepage": "https://github.com/progovoy/vmn-stamp-action.git#readme",
