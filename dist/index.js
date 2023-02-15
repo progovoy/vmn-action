@@ -13836,12 +13836,9 @@ const fail = async (msg) => {
     out = await execute(`[ -f /etc/resolv.conf ] && echo 1 || echo 0`);
     if (out == "1")
     {
-        core.info(`error 1`);
         out = await execute(`cat .vmn/vmn.log`);
-        core.info(`error 2`);
         core.info(`failed vmn. vmn log: ${out}`);
     }
-    core.info(`error 3`);
     core.setFailed(`Error Massage: ${msg}`);
     process.exit(-1);
 }
@@ -13887,15 +13884,33 @@ const main = async () => {
     }
     core.info(`step 1`);
 
-    const protection_response = await octokit.rest.actions.getGithubActionsPermissionsRepository({
+    /*const protection_response = await octokit.rest.actions.getGithubActionsPermissionsRepository({
         ...github.context.repo
       });
       core.info(`step 2`);
-    let protection = protection_response.data.allowed_actions;
+    let protection = protection_response.data.can_approve_pull_request_reviews;
     core.info(`step 3`);
     // If protected branch than create new branch and work from there. In the end, marge the pull request to the original branch
 
     core.info(`protection: ${protection}`);
+    */
+
+    let branch_name;
+
+    if(github.event_name != 'pull_request')
+    {
+        branch_name = github.ref;
+    }
+    else 
+    {
+        branch_name = github.head_ref;
+    }
+
+    core.info(`branch_name is ${branch_name}`)
+
+    let new_branch_name = `${branch_name}-temp`
+
+    await execute(`git checkout -b ${new_branch_name}`);
 
     if (!app_name) {
         await fail(
