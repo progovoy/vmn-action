@@ -10412,6 +10412,29 @@ exports.FetchError = FetchError;
 
 /***/ }),
 
+/***/ 1560:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+/**
+ * Created by heweiguang on 2018/4/21.
+ */
+
+const fs = __nccwpck_require__(7147);
+const path = __nccwpck_require__(1017);
+
+module.exports = function getCurrentBranchName(p = process.cwd()) {
+  const gitHeadPath = `${p}/.git/HEAD`;
+
+  return fs.existsSync(p) ?
+      fs.existsSync(gitHeadPath) ?
+          fs.readFileSync(gitHeadPath, 'utf-8').trim().split('/')[2] :
+          getCurrentBranchName(path.resolve(p, '..')) :
+      false
+};
+
+
+/***/ }),
+
 /***/ 4478:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -13814,6 +13837,7 @@ const childProcess = __nccwpck_require__(2081);
 const YAML = __nccwpck_require__(5089);
 const { promises: fs } = __nccwpck_require__(7147);
 const { stdout } = __nccwpck_require__(7282);
+const getCurrentBranchName = __nccwpck_require__(1560);
 
 let out;
 
@@ -13895,16 +13919,7 @@ const main = async () => {
     core.info(`protection: ${protection}`);
     */
 
-    let branch_name;
-
-    if(github.event_name != 'pull_request')
-    {
-        branch_name = github.ref;
-    }
-    else 
-    {
-        branch_name = github.head_ref;
-    }
+    let branch_name = getCurrentBranchName();
 
     core.info(`branch_name is ${branch_name}`)
 

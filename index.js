@@ -4,6 +4,7 @@ const childProcess = require("child_process");
 const YAML = require('js-yaml');
 const { promises: fs } = require("fs");
 const { stdout } = require('process');
+const getCurrentBranchName = require('node-git-current-branch');
 
 let out;
 
@@ -85,16 +86,7 @@ const main = async () => {
     core.info(`protection: ${protection}`);
     */
 
-    let branch_name;
-
-    if(github.event_name != 'pull_request')
-    {
-        branch_name = github.ref;
-    }
-    else 
-    {
-        branch_name = github.head_ref;
-    }
+    let branch_name = getCurrentBranchName();
 
     core.info(`branch_name is ${branch_name}`)
 
