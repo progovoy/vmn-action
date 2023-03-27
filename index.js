@@ -85,25 +85,25 @@ const main = async () => {
     core.info(`protection: ${protection}`);
     */
 
-    try{
-        let branch_name = getCurrentBranchName();
+    // try{
+    //     let branch_name = getCurrentBranchName();
 
-        core.info(`branch_name is ${branch_name}`)
+    //     core.info(`branch_name is ${branch_name}`)
 
-        let new_branch_name = `${branch_name}-temp`
+    //     let new_branch_name = `${branch_name}-temp`
 
-        await execute(`git checkout -b ${new_branch_name}`);
+    //     await execute(`git checkout -b ${new_branch_name}`);
 
-        if (!app_name) {
-            await fail(
-                "App Name parameter must be suplied"
-            );
-        }
+    //     if (!app_name) {
+    //         await fail(
+    //             "App Name parameter must be suplied"
+    //         );
+    //     }
 
-        core.info(`branch_name is ${new_branch_name}`)
-    } catch (e) {
-        await fail(`Error branching to temp branch ${e}`);
-    }   
+    //     core.info(`branch_name is ${new_branch_name}`)
+    // } catch (e) {
+    //     await fail(`Error branching to temp branch ${e}`);
+    // }   
 
     try{
         await execute(`pip install vmn`);
@@ -164,18 +164,18 @@ const main = async () => {
             }
         }
 
-        if (protected)
-        {
-            // If protected than marge new pull request from created branch to the original branch
-            const marge_response = await octokit.rest.pulls.merge({
-                ...github.context.repo,
-                pull_number: new_pull_number
-              });
+        // if (protected)
+        // {
+        //     // If protected than marge new pull request from created branch to the original branch
+        //     const marge_response = await octokit.rest.pulls.merge({
+        //         ...github.context.repo,
+        //         pull_number: new_pull_number
+        //       });
 
-            let marge = protection_response.data.merged;
+        //     let marge = protection_response.data.merged;
 
-            core.info(`marge: ${marge}`);
-        }
+        //     core.info(`marge: ${marge}`);
+        // }
         
         core.info(`stamp stdout: ${out}`);
     } catch (e) {
