@@ -13939,7 +13939,7 @@ const main = async () => {
     // }   
 
     try{
-        await execute(`pip install --pre -U vmn`);
+        await execute(`sudo pip install --pre -U vmn`);
     } catch (e) {
         await fail(`Error executing pip install ${e}`);
     }
