@@ -21,7 +21,7 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 
         resolve(stdout);
     });
-})
+});
 
 const fail = async (msg) => {
     out = await execute(`[ -f /etc/resolv.conf ] && echo 1 || echo 0`);
@@ -60,7 +60,6 @@ const main = async () => {
         }
     }
     const octokit = github.getOctokit(token);
-    
     const username = github.context.actor;
     const permission_response = await octokit.rest.repos.getCollaboratorPermissionLevel({
         ...github.context.repo,
@@ -103,12 +102,27 @@ const main = async () => {
     //     core.info(`branch_name is ${new_branch_name}`)
     // } catch (e) {
     //     await fail(`Error branching to temp branch ${e}`);
-    // }   
+    // }
 
+    let failed = true;
+    let err_str = "";
     try{
         await execute(`pip install --pre -U vmn`);
+        failed = false;
     } catch (e) {
-        await fail(`Error executing pip install ${e}`);
+        //await fail(`Error executing pip install ${e}`);
+        err_str = `Error executing pip install ${e}`;
+    }
+    try{
+        await execute(`sudo pip install --pre -U vmn`);
+        failed = false;
+    } catch (e) {
+        //await fail(`Error executing pip install ${e}`);
+        err_str += `Error executing pip install ${e}`;
+    }
+    if (failed)
+    {
+        await fail(err_str);
     }
     //core.info(`branch_name is a ${new_branch_name}`)
     await execute(`vmn init`, skip_error=true);
@@ -120,12 +134,12 @@ const main = async () => {
         let show_result_obj = YAML.load(show_result);
         core.info(`show_result_obj["release_mode"]: ${show_result_obj["release_mode"]}`);
 
-        if (prerelease_name === "") 
+        if (prerelease_name === "")
         {
             prerelease_name = "rc";
         }
 
-        if (release === "true") 
+        if (release === "true")
         {
             if (show_result_obj["release_mode"].includes("prerelease"))
             {
@@ -135,7 +149,7 @@ const main = async () => {
             {
                 await fail("Can't make release of non-prerelease version");
             }
-            
+
         }
         else if (release_candidate === "true")
         {
@@ -152,7 +166,7 @@ const main = async () => {
                 await fail("stamp-mode must be provided for first prerelease (major, minor, or patch)");
             }
         }
-        else 
+        else
         {
             if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
             {
@@ -176,7 +190,7 @@ const main = async () => {
 
         //     core.info(`marge: ${marge}`);
         // }
-        
+
         core.info(`stamp stdout: ${out}`);
     } catch (e) {
         await fail(`Error executing vmn stamp ${e}`);
@@ -187,7 +201,7 @@ const main = async () => {
         core.setOutput("verstr", out.split(/\r?\n/)[0]);
     } catch (e) {
         await fail(`Error executing vmn show ${e}`);
-    }    
+    }
 }
 
 main().catch(err => {
