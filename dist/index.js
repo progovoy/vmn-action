@@ -13943,10 +13943,10 @@ const main = async () => {
     } catch (e) {
         await fail(`Error executing pip install ${e}`);
     }
-    core.info(`branch_name is a ${new_branch_name}`)
+    //core.info(`branch_name is a ${new_branch_name}`)
     await execute(`vmn init`, skip_error=true);
     await execute(`vmn init-app ${app_name}`, skip_error=true);
-    core.info(`branch_name is ${new_branch_name}`)
+    //core.info(`branch_name is ${new_branch_name}`)
 
     try{
         let show_result = await execute(`vmn show --verbose ${app_name}`);
