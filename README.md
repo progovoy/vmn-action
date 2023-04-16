@@ -37,6 +37,10 @@ name: test
 on:
   workflow_dispatch:
     inputs:
+      stamp_version:
+        type: boolean
+        description: Do you want to stamp a version?
+        default: false
       version_type:
         type: choice
         description: Release mode
@@ -56,8 +60,9 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.48
+      uses: progovoy/vmn-action@vmna_0.1.50
       with:
+        only-output-mode: ${{ !inputs.stamp_version }}
         stamp-mode: ${{inputs.version_type}}
         app-name: ${{inputs.app_name}}
      
@@ -88,7 +93,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.48
+      uses: progovoy/vmn-action@vmna_0.1.50
       with:
         stamp-mode: none
         release-candidate: true
