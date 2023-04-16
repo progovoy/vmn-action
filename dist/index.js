@@ -13968,11 +13968,11 @@ const main = async () => {
 
     if (only_output_mode === "true") {
         try{
-            out = await execute(`vmn show ${app_name}`);
+            out = await execute(`vmn show --ignore-dirty ${app_name}`);
             core.setOutput("verstr", out.split(/\r?\n/)[0]);
             return;
         } catch (e) {
-            await fail(`Error executing vmn show ${e}`);
+            await fail(`Error executing vmn show --ignore-dirty ${e}`);
         }
     }
 
