@@ -13970,6 +13970,7 @@ const main = async () => {
         try{
             out = await execute(`vmn show --ignore-dirty ${app_name}`);
             core.setOutput("verstr", out.split(/\r?\n/)[0]);
+            core.info(`stamp stdout: ${out}`);
             return;
         } catch (e) {
             await fail(`Error executing vmn show --ignore-dirty ${e}`);
