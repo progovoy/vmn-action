@@ -346,3 +346,274 @@ Lock 140370675373680 released on /Users/yuvalaharonifabric/Repository/vmn-action
   <-- Exiting vmn_run took 0.116392 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:2773
 [DEBUG] 2023-04-16 10:59:30 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
 <-- Exiting main took 0.116891 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:2763
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:2823 =>
+
+[1mCommand line: /Library/Frameworks/Python.framework/Versions/3.8/bin/vmn stamp -r patch vmna[0m
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+    --> Entering _vmn_run at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:2847
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+      --> Entering __init__ at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:55
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+        --> Entering __init__ at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:717
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+          --> Entering __init__ at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:84
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+            --> Entering get_client at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1621
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+              --> Entering __init__ at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:660
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                --> Entering initialize_git_backend at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:698
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                <-- Exiting initialize_git_backend took 0.000298 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:698
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                --> Entering add_git_user_cfg_if_missing at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1151
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                <-- Exiting add_git_user_cfg_if_missing took 0.000481 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1151
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                --> Entering get_active_branch at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1295
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                <-- Exiting get_active_branch took 0.000135 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1295
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                --> Entering get_remote_tracking_branch at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1227
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:88 =>
+                git rev-parse --abbrev-ref --symbolic-full-name main@{u}
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:119 =>
+                return code: 0, git cmd took: 0.009885 seconds.
+                stdout: origin/main
+                stderr: 
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                <-- Exiting get_remote_tracking_branch took 0.010338 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1227
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+              <-- Exiting __init__ took 0.012395 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:660
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+            <-- Exiting get_client took 0.013581 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1621
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+            --> Entering initialize_paths at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:186
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+            <-- Exiting initialize_paths took 0.000050 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:186
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+            --> Entering update_attrs_from_app_conf_file at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:154
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+            <-- Exiting update_attrs_from_app_conf_file took 0.002423 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:154
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+            --> Entering initialize_backend_attrs at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:292
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+              --> Entering remote at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1416
+[DEBUG] 2023-04-16 11:00:21 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:88 =>
+              git remote get-url --all origin
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:119 =>
+              return code: 0, git cmd took: 0.009749 seconds.
+              stdout: https://github.com/progovoy/vmn-action.git
+              stderr: 
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+              <-- Exiting remote took 0.010319 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1416
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+              --> Entering initialize_configured_deps at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:225
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+              <-- Exiting initialize_configured_deps took 0.000176 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:225
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+              --> Entering last_user_changeset at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1389
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:88 =>
+              git cat-file --batch-check
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:119 =>
+              return code: 0, git cmd took: 0.006720 seconds.
+              stdout: 
+              stderr: 
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:88 =>
+              git cat-file --batch
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:119 =>
+              return code: 0, git cmd took: 0.006350 seconds.
+              stdout: 
+              stderr: 
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+              <-- Exiting last_user_changeset took 0.019818 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1389
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+              --> Entering get_actual_deps_state at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1371
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                --> Entering get_repo_details at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:719
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:88 =>
+                git cat-file --batch-check
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:119 =>
+                return code: 0, git cmd took: 0.006611 seconds.
+                stdout: 
+                stderr: 
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:88 =>
+                git remote get-url --all origin
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:119 =>
+                return code: 0, git cmd took: 0.009123 seconds.
+                stdout: https://github.com/progovoy/vmn-action.git
+                stderr: 
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                <-- Exiting get_repo_details took 0.020867 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:719
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+              <-- Exiting get_actual_deps_state took 0.021061 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1371
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+              --> Entering get_version_number_from_file at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:808
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+              <-- Exiting get_version_number_from_file took 0.001922 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:808
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+              --> Entering get_version_info_from_verstr at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:248
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                --> Entering get_tag_name at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:284
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                <-- Exiting get_tag_name took 0.000002 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:284
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                --> Entering deserialize_vmn_tag_name at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:551
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                <-- Exiting deserialize_vmn_tag_name took 0.000658 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:551
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                --> Entering get_tag_version_info at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1533
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                  --> Entering get_commit_object_from_tag_name at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1601
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                  <-- Exiting get_commit_object_from_tag_name took 0.000679 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1601
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                  --> Entering get_all_brother_tags at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1133
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                    --> Entering changeset at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1425
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                    <-- Exiting changeset took 0.000225 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1425
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                    --> Entering get_all_commit_tags at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1108
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:88 =>
+                    git tag --points-at 3e54cfe752ccf539607f50617ed10f6e8127225c
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:119 =>
+                    return code: 0, git cmd took: 0.012363 seconds.
+                    stdout: vmna_0.1.47
+                    stderr: 
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                      --> Entering parse_tag_message at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1555
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                        --> Entering get_tag_object_from_tag_name at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1038
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                        <-- Exiting get_tag_object_from_tag_name took 0.000751 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1038
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                      <-- Exiting parse_tag_message took 0.003161 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1555
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                    <-- Exiting get_all_commit_tags took 0.016233 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1108
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                  <-- Exiting get_all_brother_tags took 0.016705 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1133
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                  --> Entering enhance_ver_info at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:528
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                    --> Entering deserialize_vmn_tag_name at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:551
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                    <-- Exiting deserialize_vmn_tag_name took 0.000029 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:551
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                  <-- Exiting enhance_ver_info took 0.000147 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:528
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                <-- Exiting get_tag_version_info took 0.018015 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1533
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                --> Entering enhance_ver_info at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:528
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+                  --> Entering deserialize_vmn_tag_name at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:551
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                  <-- Exiting deserialize_vmn_tag_name took 0.000008 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:551
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+                <-- Exiting enhance_ver_info took 0.000114 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:528
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+              <-- Exiting get_version_info_from_verstr took 0.019258 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:248
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+              --> Entering get_tag_name at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:284
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+              <-- Exiting get_tag_name took 0.000002 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:284
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+            <-- Exiting initialize_backend_attrs took 0.074424 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:292
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+          <-- Exiting __init__ took 0.091014 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:84
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+        <-- Exiting __init__ took 0.091133 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:717
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+      <-- Exiting __init__ took 0.091254 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:55
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+      --> Entering prepare_for_remote_operation at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1256
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+      <-- Exiting prepare_for_remote_operation took 0.000002 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1256
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+      --> Entering handle_stamp at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:1434
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+        --> Entering _get_repo_status at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:1744
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+          --> Entering check_for_pending_changes at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1162
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:88 =>
+          git diff --cached --abbrev=40 --full-index --raw
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:119 =>
+          return code: 0, git cmd took: 0.010241 seconds.
+          stdout: 
+          stderr: 
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:88 =>
+          git diff --abbrev=40 --full-index --raw
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:119 =>
+          return code: 0, git cmd took: 0.010152 seconds.
+          stdout: :100644 100644 8f5740a8a0c8e850f966ffba24345aa9971c8fd8 0000000000000000000000000000000000000000 M	.vmn/global_vmn.log
+          stderr: 
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+            --> Entering root at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:829
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+            <-- Exiting root took 0.000004 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:829
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+          <-- Exiting check_for_pending_changes took 0.021592 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1162
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+          --> Entering check_for_outgoing_changes at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1170
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:88 =>
+          git rev-parse --verify origin/main
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:119 =>
+          return code: 0, git cmd took: 0.009006 seconds.
+          stdout: 04a92380447fb41731b68691a753c386bb6900cb
+          stderr: 
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:88 =>
+          git rev-list origin/main..main --
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:119 =>
+          return code: 0, git cmd took: 0.006128 seconds.
+          stdout: 
+          stderr: 
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+          <-- Exiting check_for_outgoing_changes took 0.018921 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1170
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+          --> Entering get_version_number_from_file at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:808
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+          <-- Exiting get_version_number_from_file took 0.000677 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:808
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+          --> Entering find_matching_version at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:721
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+            --> Entering serialize_vmn_tag_name at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:360
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+            <-- Exiting serialize_vmn_tag_name took 0.000033 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:360
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+            --> Entering deserialize_vmn_tag_name at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:551
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+            <-- Exiting deserialize_vmn_tag_name took 0.000012 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:551
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+            --> Entering serialize_vmn_tag_name at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:360
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+            <-- Exiting serialize_vmn_tag_name took 0.000007 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:360
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:146 =>
+            --> Entering last_user_changeset at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1389
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+            <-- Exiting last_user_changeset took 0.000452 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:1389
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+          <-- Exiting find_matching_version took 0.000970 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:721
+[ERROR] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:1958 =>
+Pending changes in /Users/yuvalaharonifabric/Repository/vmn-action.
+[ERROR] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:1960 =>
+Repository status is in unexpected state:
+{'pending', 'modified', 'detached'}
+versus optional:
+{'detached', 'modified'}
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+        <-- Exiting _get_repo_status took 0.043142 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:1744
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:1468 =>
+Error occured when getting the repo status: {'pending': True, 'detached': False, 'outgoing': False, 'state': {'deps_synced_with_conf', 'repo_tracked', 'modified', 'repos_exist_locally', 'app_tracked', 'pending'}, 'error': True, 'repos_exist_locally': True, 'deps_synced_with_conf': True, 'repo_tracked': True, 'app_tracked': True, 'modified': True, 'dirty_deps': False, 'err_msgs': {'dirty_deps': '', 'deps_synced_with_conf': '', 'repo_tracked': 'vmn repo tracking is already initialized', 'app_tracked': 'vmn app tracking is already initialized', 'pending': 'Pending changes in /Users/yuvalaharonifabric/Repository/vmn-action.'}, 'repos': {}, 'matched_version_info': None, 'local_repos_diff': set()}
+NoneType: None
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+      <-- Exiting handle_stamp took 0.043480 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:1434
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+    <-- Exiting _vmn_run took 0.135105 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:2847
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/filelock/_api.py:209 =>
+Attempting to release lock 140689980003952 on /Users/yuvalaharonifabric/Repository/vmn-action/.vmn/vmn.lock
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/filelock/_api.py:212 =>
+Lock 140689980003952 released on /Users/yuvalaharonifabric/Repository/vmn-action/.vmn/vmn.lock
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+  <-- Exiting vmn_run took 0.139460 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:2773
+[DEBUG] 2023-04-16 11:00:22 /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/stamp_utils.py:158 =>
+<-- Exiting main took 0.140048 seconds at /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/version_stamp/vmn.py:2763
