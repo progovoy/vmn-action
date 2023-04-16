@@ -14,7 +14,7 @@ If you want to use `vmn` in a more advanced way, visit its official GitHub page 
 
 ```yaml
 - id: foo
-  uses: progovoy/vmn-action@vmna_0.1.48
+  uses: progovoy/vmn-action@vmna_0.1.51
   with:
     stamp-mode: {none, major, minor, patch}
     release-candidate: <Boolean>              # Set either release-candidate (will create patch release-candidate if this is the first release-candidate) 
@@ -60,7 +60,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.50
+      uses: progovoy/vmn-action@vmna_0.1.51
       with:
         only-output-mode: ${{ !inputs.stamp_version }}
         stamp-mode: ${{inputs.version_type}}
@@ -93,7 +93,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.50
+      uses: progovoy/vmn-action@vmna_0.1.51
       with:
         stamp-mode: none
         release-candidate: true
