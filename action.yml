@@ -6,7 +6,7 @@ branding:
 inputs:
   stamp-mode:
     type: choice
-    description: Desired Stamp Mode
+    description: "Desired Stamp Mode"
     options:
       - major
       - minor
@@ -14,14 +14,17 @@ inputs:
     default: patch
   release-candidate: 
     type: boolean
-    description: Is it Release Candidate?
+    description: "Is it Release Candidate?"
   prerelease-name:
     type: string
-    description: Prerelease Name
+    description: "Prerelease Name"
     default: rc
   release: 
     type: boolean
-    description: Is it ready to be released?
+    description: "Is it ready to be released?"
+  only-output-mode:
+    type: boolean
+    description: "Only return current version to verstr output"
   app-name:
     description: "Name of the app to stamp"
     required: true
