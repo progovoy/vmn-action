@@ -13967,9 +13967,13 @@ const main = async () => {
     //core.info(`branch_name is ${new_branch_name}`)
 
     if (only_output_mode === "true") {
-        out = await execute(`vmn show ${app_name}`);
-        core.setOutput("verstr", out.split(/\r?\n/)[0]);
-        return;
+        try{
+            out = await execute(`vmn show ${app_name}`);
+            core.setOutput("verstr", out.split(/\r?\n/)[0]);
+            return;
+        } catch (e) {
+            await fail(`Error executing vmn show ${e}`);
+        }
     }
 
     try{
