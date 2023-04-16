@@ -13874,6 +13874,7 @@ const main = async () => {
     let release_candidate = core.getInput('release-candidate');
     let prerelease_name = core.getInput('prerelease-name');
     let release = core.getInput('release');
+    let only_output_mode = core.getInput('only-output-mode');
     core.info(`app_name: ${app_name}`);
     core.info(`stamp_mode: ${stamp_mode}`);
     core.info(`release_candidate: ${release_candidate}`);
@@ -13940,18 +13941,21 @@ const main = async () => {
     let failed = true;
     let err_str = "";
     try{
-        await execute(`pip install --pre -U vmn`);
+        await execute(`sudo pip install --pre -U vmn`);
         failed = false;
     } catch (e) {
         //await fail(`Error executing pip install ${e}`);
         err_str = `Error executing pip install ${e}`;
     }
-    try{
-        await execute(`sudo pip install --pre -U vmn`);
-        failed = false;
-    } catch (e) {
-        //await fail(`Error executing pip install ${e}`);
-        err_str += `Error executing pip install ${e}`;
+    if (failed)
+    {
+        try{
+            await execute(`pip install --pre -U vmn`);
+            failed = false;
+        } catch (e) {
+            //await fail(`Error executing pip install ${e}`);
+            err_str += `Error executing pip install ${e}`;
+        }
     }
     if (failed)
     {
@@ -13961,6 +13965,12 @@ const main = async () => {
     await execute(`vmn init`, skip_error=true);
     await execute(`vmn init-app ${app_name}`, skip_error=true);
     //core.info(`branch_name is ${new_branch_name}`)
+
+    if (only_output_mode === "true") {
+        out = await execute(`vmn show ${app_name}`);
+        core.setOutput("verstr", out.split(/\r?\n/)[0]);
+        return;
+    }
 
     try{
         let show_result = await execute(`vmn show --verbose ${app_name}`);
