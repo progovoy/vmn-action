@@ -32,6 +32,18 @@ inputs:
   stamp_from_version:
     type: string
     description: "Overwrite the base that VMN stamp will work from"
+  do-gen:
+    type: boolean
+    description: "Do you want to perform a generator?"
+  gen-template-path:
+    type: string
+    description: "Jinja2 Template path"
+  gen-output-path:
+    type: string
+    description: "Saving path"
+  gen-custom-yaml-path:
+    type: string
+    description: "Customs params YAML file path"
   debug-mode:
     type: boolean
     description: "Show extra logs?"
@@ -41,6 +53,12 @@ inputs:
 outputs:
   verstr:
     description: 'The version after stamping'
+  dirty:
+    description: 'Flag that indicate if the version is dirty (If changes have been made since last stamp operation)'
+  is_in_rc_mode:
+    description: 'Flag that indicate if the stamped app is in release candidate mode'
+  verbose_yaml:
+    description: 'The whole "vmn show --verbose <APP_NAME>" output'
 runs:
   using: 'node16'
   main: 'dist/index.js'
