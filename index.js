@@ -48,6 +48,8 @@ const main = async () => {
     core.info(`stamp_mode: ${stamp_mode}`);
     core.info(`release_candidate: ${release_candidate}`);
     core.info(`prerelease_name: ${prerelease_name}`);
+    core.info(`only_output_mode: ${only_output_mode}`);
+    core.info(`debug_mode: ${debug_mode}`);
     core.info(`release: ${release}`);
     let protected = false;
     let new_pull_number = 0;
