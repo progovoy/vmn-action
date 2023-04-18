@@ -28,8 +28,9 @@ const fail = async (msg) => {
     core.info(`failed vmn`);
     out = await execute(`[ -f .vmn/vmn.log ] && echo 1 || echo 0`);
     core.info(`${out}`);
-    if (out == "1")
+    if (out.includes("1"))
     {
+        core.info(`vmn log will be presented`);
         out = await execute(`cat .vmn/vmn.log`);
         core.info(`vmn log: ${out}`);
     }
