@@ -16116,10 +16116,21 @@ const display_version = async (debug_mode, extra_args, app_name) => {
         out = await execute(`vmn show --verbose ${app_name}`);
         let out_obj = YAML.load(out);
         current_version = out_obj["version"];
+        version_type = out_obj["type"];
+        is_in_rc_mode = false
+        if (version_type != "release") {
+            is_in_rc_mode = true
+        }
+        let is_dirty = false
         if ("dirty" in out_obj) {
+            is_dirty = true
             current_version += ".d";
         }
         core.setOutput("verstr", current_version);
+        core.setOutput("dirty", is_dirty);
+        core.setOutput("is_in_rc_mode", is_in_rc_mode);
+        core.setOutput("verbose_yaml", out_obj);
+
         core.info(`vmn version: ${current_version}`)
         
         return;
@@ -16131,13 +16142,20 @@ const display_version = async (debug_mode, extra_args, app_name) => {
 
 const main = async () => {
     let app_name = core.getInput('app-name');
+    
+    let do_stamp = core.getInput('do-stamp');
     let stamp_mode = core.getInput('stamp-mode');
     let release_candidate = core.getInput('release-candidate');
     let prerelease_name = core.getInput('prerelease-name');
     let release = core.getInput('release');
-    let do_stamp = core.getInput('do-stamp');
-    let debug_mode = core.getInput('debug-mode');
     let stamp_from_version = core.getInput('stamp-from-version')
+    
+    let do_gen = core.getInput('do-gen');
+    let gen_template_path = core.getInput('gen-template-path');
+    let gen_output_path = core.getInput('gen-output-path');
+    let gen_custom_yaml_path = core.getInput('gen-custom-yaml-path');
+    
+    let debug_mode = core.getInput('debug-mode');
     let install_nonstable_vmn_version = core.getInput('install-nonstable-vmn-version');
     core.info(`app_name: ${app_name}`);
     core.info(`stamp_mode: ${stamp_mode}`);
@@ -16240,86 +16258,99 @@ const main = async () => {
     debug_mode === "true" ? core.info(`vmn ${extra_args} init-app ${app_name} stdout: ${out}`) : "";
     //core.info(`branch_name is ${new_branch_name}`)
 
-    if (do_stamp !== "true") {
-        await display_version(debug_mode, extra_args, app_name);
-        return;
+    if (do_stamp === "true") {
+
+        try{
+            let stamp_params = ""
+            if (stamp_from_version !== "" ) {
+                stamp_params += `--ov ${stamp_from_version}`
+            }
+            let show_result = await execute(`vmn show --verbose ${app_name}`);
+            
+            let show_result_obj = YAML.load(show_result);
+            core.info(`show_result_obj["release_mode"]: ${show_result_obj["release_mode"]}`);
+
+            if (prerelease_name === "")
+            {
+                prerelease_name = "rc";
+            }
+
+            if (release === "true")
+            {
+                if (show_result_obj["release_mode"].includes("prerelease"))
+                {
+                    out = await execute(`vmn ${extra_args} release ${app_name}`);
+                    debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
+                }
+                else
+                {
+                    await fail("Can't make release of non-prerelease version");
+                }
+
+            }
+            else if (release_candidate === "true")
+            {
+                if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
+                {
+                    out = await execute(`vmn ${extra_args} stamp ${stamp_params} -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
+                    debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
+                }
+                else if (show_result_obj["release_mode"].includes("prerelease"))
+                {
+                    out = await execute(`vmn ${extra_args} stamp --pr ${prerelease_name} ${app_name}`);
+                    debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
+                }
+                else
+                {
+                    await fail("stamp-mode must be provided for first prerelease (major, minor, or patch)");
+                }
+            }
+            else
+            {
+                if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
+                {
+                    out = await execute(`vmn ${extra_args} stamp ${stamp_params} ${stamp_params} -r ${stamp_mode} ${app_name}`);
+                    debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
+                }
+                else
+                {
+                    await fail("Invaild stamp-mode (major, minor, or patch)");
+                }
+            }
+
+            // if (protected)
+            // {
+            //     // If protected than marge new pull request from created branch to the original branch
+            //     const marge_response = await octokit.rest.pulls.merge({
+            //         ...github.context.repo,
+            //         pull_number: new_pull_number
+            //       });
+
+            //     let marge = protection_response.data.merged;
+
+            //     core.info(`marge: ${marge}`);
+            // }
+
+            core.info(`stamp stdout: ${out}`);
+        } catch (e) {
+            await fail(`Error executing vmn stamp ${e}`);
+        }
     }
 
-    let stamp_params = ""
-    if (stamp_from_version !== "" ) {
-        stamp_params += `--ov ${stamp_from_version}`
-    }
-
-    try{
-        let show_result = await execute(`vmn show --verbose ${app_name}`);
-        
-        let show_result_obj = YAML.load(show_result);
-        core.info(`show_result_obj["release_mode"]: ${show_result_obj["release_mode"]}`);
-
-        if (prerelease_name === "")
-        {
-            prerelease_name = "rc";
+    if (do_gen === "true") {
+        try{
+        if (gen_template_path === "" || gen_output_path === "") {
+            await fail(`gen_template_path and gen_output_path are required`);
         }
-
-        if (release === "true")
-        {
-            if (show_result_obj["release_mode"].includes("prerelease"))
-            {
-                out = await execute(`vmn ${extra_args} release ${app_name}`);
-                debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
-            }
-            else
-            {
-                await fail("Can't make release of non-prerelease version");
-            }
-
+        let custom_yaml = ""
+        if (gen_custom_yaml_path !== "") {
+            custom_yaml = `-c ${gen_custom_yaml_path}`
         }
-        else if (release_candidate === "true")
-        {
-            if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
-            {
-                out = await execute(`vmn ${extra_args} stamp ${stamp_params} -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
-                debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
-            }
-            else if (show_result_obj["release_mode"].includes("prerelease"))
-            {
-                out = await execute(`vmn ${extra_args} stamp --pr ${prerelease_name} ${app_name}`);
-                debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
-            }
-            else
-            {
-                await fail("stamp-mode must be provided for first prerelease (major, minor, or patch)");
-            }
+        let out = await execute(`vmn gen -t ${gen_template_path} -o ${gen_output_path} ${custom_yaml} ${app_name}`);
+        core.info(`gen stdout: ${out}`);
+        } catch (e) {
+            await fail(`Error executing vmn gen ${e}`);
         }
-        else
-        {
-            if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
-            {
-                out = await execute(`vmn ${extra_args} stamp ${stamp_params} ${stamp_params} -r ${stamp_mode} ${app_name}`);
-                debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
-            }
-            else
-            {
-                await fail("Invaild stamp-mode (major, minor, or patch)");
-            }
-        }
-
-        // if (protected)
-        // {
-        //     // If protected than marge new pull request from created branch to the original branch
-        //     const marge_response = await octokit.rest.pulls.merge({
-        //         ...github.context.repo,
-        //         pull_number: new_pull_number
-        //       });
-
-        //     let marge = protection_response.data.merged;
-
-        //     core.info(`marge: ${marge}`);
-        // }
-
-        core.info(`stamp stdout: ${out}`);
-    } catch (e) {
-        await fail(`Error executing vmn stamp ${e}`);
     }
 
     try{
