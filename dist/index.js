@@ -16092,11 +16092,12 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 });
 
 const fail = async (msg) => {
+    core.info(`failed vmn`);
     out = await execute(`[ -f .vmn/vmn.log ] && echo 1 || echo 0`);
     if (out == "1")
     {
         out = await execute(`cat .vmn/vmn.log`);
-        core.info(`failed vmn. vmn log: ${out}`);
+        core.info(`vmn log: ${out}`);
     }
     core.setFailed(`Error Massage: ${msg}`);
     process.exit(-1);
