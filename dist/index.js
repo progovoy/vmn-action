@@ -16107,6 +16107,27 @@ const fail = async (msg) => {
     process.exit(-1);
 }
 
+const display_version = async (debug_mode, extra_args, app_name) => {
+    try{ 
+        if (debug_mode === "true") {
+            out = await execute(`vmn ${extra_args} show --verbose ${app_name}`);
+            core.info(`vmn ${extra_args} show --verbose ${app_name} stdout: ${out}`)
+        }
+        out = await execute(`vmn show --verbose ${app_name}`);
+        let out_obj = YAML.load(out);
+        current_version = out_obj["version"];
+        if ("dirty" in out_obj) {
+            current_version += ".d";
+        }
+        core.setOutput("verstr", current_version);
+        core.info(`vmn version: ${current_version}`)
+        
+        return;
+    } catch (e) {
+        await fail(`Error executing vmn show --ignore-dirty ${e}`);
+    }
+}
+
 
 const main = async () => {
     let app_name = core.getInput('app-name');
@@ -16114,13 +16135,15 @@ const main = async () => {
     let release_candidate = core.getInput('release-candidate');
     let prerelease_name = core.getInput('prerelease-name');
     let release = core.getInput('release');
-    let only_output_mode = core.getInput('only-output-mode');
+    let do_stamp = core.getInput('do-stamp');
     let debug_mode = core.getInput('debug-mode');
+    let stamp_from_version = core.getInput('stamp-from-version')
+    let install_nonstable_vmn_version = core.getInput('install-nonstable-vmn-version');
     core.info(`app_name: ${app_name}`);
     core.info(`stamp_mode: ${stamp_mode}`);
     core.info(`release_candidate: ${release_candidate}`);
     core.info(`prerelease_name: ${prerelease_name}`);
-    core.info(`only_output_mode: ${only_output_mode}`);
+    core.info(`do_stamp: ${do_stamp}`);
     core.info(`debug_mode: ${debug_mode}`);
     core.info(`release: ${release}`);
     let protected = false;
@@ -16183,20 +16206,22 @@ const main = async () => {
 
     let failed = true;
     let err_str = "";
+    let pre_version = "";
+    if (install_nonstable_vmn_version === "true") {
+        pre_version += "--pre -U"
+    }
     try{
-        await execute(`sudo pip install --pre -U vmn`);
+        await execute(`sudo pip install ${pre_version} vmn`);
         failed = false;
     } catch (e) {
-        //await fail(`Error executing pip install ${e}`);
-        err_str = `Error executing pip install ${e}`;
+        err_str = `Error executing pip install ${pre_version} ${e}`;
     }
     if (failed)
     {
         try{
-            await execute(`pip install --pre -U vmn`);
+            await execute(`pip install ${pre_version} vmn`);
             failed = false;
         } catch (e) {
-            //await fail(`Error executing pip install ${e}`);
             err_str += `Error executing pip install ${e}`;
         }
     }
@@ -16215,22 +16240,14 @@ const main = async () => {
     debug_mode === "true" ? core.info(`vmn ${extra_args} init-app ${app_name} stdout: ${out}`) : "";
     //core.info(`branch_name is ${new_branch_name}`)
 
-    if (only_output_mode === "true") {
-        try{
-            out = await execute(`vmn ${extra_args} show --ignore-dirty ${app_name}`);
-            if (debug_mode === "true") {
-                core.info(`vmn ${extra_args} init stdout: ${out}`)
-                out = await execute(`vmn show --ignore-dirty ${app_name}`);
-            }
-            else {
-                core.info(`stamp stdout: ${out}`);
-            }
-            core.setOutput("verstr", out.split(/\r?\n/)[0]);
-            
-            return;
-        } catch (e) {
-            await fail(`Error executing vmn show --ignore-dirty ${e}`);
-        }
+    if (do_stamp !== "true") {
+        await display_version(debug_mode, extra_args, app_name);
+        return;
+    }
+
+    let stamp_params = ""
+    if (stamp_from_version !== "" ) {
+        stamp_params += `--ov ${stamp_from_version}`
     }
 
     try{
@@ -16259,14 +16276,14 @@ const main = async () => {
         }
         else if (release_candidate === "true")
         {
-            if (show_result_obj["release_mode"].includes("prerelease"))
+            if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
             {
-                out = await execute(`vmn ${extra_args} stamp --pr ${prerelease_name} ${app_name}`);
+                out = await execute(`vmn ${extra_args} stamp ${stamp_params} -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
                 debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
             }
-            else if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
+            else if (show_result_obj["release_mode"].includes("prerelease"))
             {
-                out = await execute(`vmn ${extra_args} stamp -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
+                out = await execute(`vmn ${extra_args} stamp --pr ${prerelease_name} ${app_name}`);
                 debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
             }
             else
@@ -16278,7 +16295,7 @@ const main = async () => {
         {
             if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
             {
-                out = await execute(`vmn ${extra_args} stamp -r ${stamp_mode} ${app_name}`);
+                out = await execute(`vmn ${extra_args} stamp ${stamp_params} ${stamp_params} -r ${stamp_mode} ${app_name}`);
                 debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
             }
             else
@@ -16306,8 +16323,7 @@ const main = async () => {
     }
 
     try{
-        out = await execute(`vmn show ${app_name}`);
-        core.setOutput("verstr", out.split(/\r?\n/)[0]);
+        await display_version(debug_mode, extra_args, app_name);
     } catch (e) {
         await fail(`Error executing vmn show ${e}`);
     }

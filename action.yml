@@ -4,6 +4,13 @@ branding:
   icon: trending-up
   color: green
 inputs:
+  app-name:
+    description: "Name of the app to stamp"
+    required: true
+  do-stamp:
+    type: boolean
+    description: "Do you want to perform a stamp?"
+    default: false
   stamp-mode:
     type: choice
     description: "Desired Stamp Mode"
@@ -22,15 +29,15 @@ inputs:
   release: 
     type: boolean
     description: "Is it ready to be released?"
-  only-output-mode:
-    type: boolean
-    description: "Only return current version to verstr output"
+  stamp_from_version:
+    type: string
+    description: "Overwrite the base that VMN stamp will work from"
   debug-mode:
     type: boolean
     description: "Show extra logs?"
-  app-name:
-    description: "Name of the app to stamp"
-    required: true
+  install-nonstable-vmn-version:
+    type: boolean
+    description: "Install nonstable vmn version?"
 outputs:
   verstr:
     description: 'The version after stamping'
