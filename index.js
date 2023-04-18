@@ -5,6 +5,7 @@ const YAML = require('js-yaml');
 const { promises: fs } = require("fs");
 const { stdout } = require('process');
 const getCurrentBranchName = require('node-git-current-branch');
+const { Octokit } = require("@octokit/rest");
 
 let out;
 
@@ -24,7 +25,7 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
 });
 
 const fail = async (msg) => {
-    out = await execute(`[ -f /etc/resolv.conf ] && echo 1 || echo 0`);
+    out = await execute(`[ -f .vmn/vmn.log ] && echo 1 || echo 0`);
     if (out == "1")
     {
         out = await execute(`cat .vmn/vmn.log`);
@@ -42,6 +43,7 @@ const main = async () => {
     let prerelease_name = core.getInput('prerelease-name');
     let release = core.getInput('release');
     let only_output_mode = core.getInput('only-output-mode');
+    let debug_mode = core.getInput('debug-mode');
     core.info(`app_name: ${app_name}`);
     core.info(`stamp_mode: ${stamp_mode}`);
     core.info(`release_candidate: ${release_candidate}`);
@@ -128,14 +130,18 @@ const main = async () => {
     {
         await fail(err_str);
     }
+    extra_args = ""
+    if (debug_mode === "true") {
+        extra_args += "--debug";
+    }
     //core.info(`branch_name is a ${new_branch_name}`)
-    await execute(`vmn init`, skip_error=true);
-    await execute(`vmn init-app ${app_name}`, skip_error=true);
+    await execute(`vmn init ${extra_args}`, skip_error=true);
+    await execute(`vmn init-app ${extra_args} ${app_name}`, skip_error=true);
     //core.info(`branch_name is ${new_branch_name}`)
 
     if (only_output_mode === "true") {
         try{
-            out = await execute(`vmn show --ignore-dirty ${app_name}`);
+            out = await execute(`vmn show  ${extra_args} --ignore-dirty ${app_name}`);
             core.setOutput("verstr", out.split(/\r?\n/)[0]);
             core.info(`stamp stdout: ${out}`);
             return;
@@ -145,7 +151,7 @@ const main = async () => {
     }
 
     try{
-        let show_result = await execute(`vmn show --verbose ${app_name}`);
+        let show_result = await execute(`vmn show  ${extra_args} --verbose ${app_name}`);
         let show_result_obj = YAML.load(show_result);
         core.info(`show_result_obj["release_mode"]: ${show_result_obj["release_mode"]}`);
 
@@ -158,7 +164,7 @@ const main = async () => {
         {
             if (show_result_obj["release_mode"].includes("prerelease"))
             {
-                out = await execute(`vmn release ${app_name}`);
+                out = await execute(`vmn release ${extra_args} ${app_name}`);
             }
             else
             {
@@ -170,11 +176,11 @@ const main = async () => {
         {
             if (show_result_obj["release_mode"].includes("prerelease"))
             {
-                out = await execute(`vmn stamp --pr ${prerelease_name} ${app_name}`);
+                out = await execute(`vmn stamp ${extra_args} --pr ${prerelease_name} ${app_name}`);
             }
             else if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
             {
-                out = await execute(`vmn stamp -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
+                out = await execute(`vmn stamp ${extra_args} -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
             }
             else
             {
@@ -185,7 +191,7 @@ const main = async () => {
         {
             if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
             {
-                out = await execute(`vmn stamp -r ${stamp_mode} ${app_name}`);
+                out = await execute(`vmn stamp ${extra_args} -r ${stamp_mode} ${app_name}`);
             }
             else
             {
@@ -212,7 +218,7 @@ const main = async () => {
     }
 
     try{
-        out = await execute(`vmn show ${app_name}`);
+        out = await execute(`vmn show ${extra_args} ${app_name}`);
         core.setOutput("verstr", out.split(/\r?\n/)[0]);
     } catch (e) {
         await fail(`Error executing vmn show ${e}`);

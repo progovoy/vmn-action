@@ -25,6 +25,9 @@ inputs:
   only-output-mode:
     type: boolean
     description: "Only return current version to verstr output"
+  debug-mode:
+    type: boolean
+    description: "Show extra logs?"
   app-name:
     description: "Name of the app to stamp"
     required: true
