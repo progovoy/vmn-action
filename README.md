@@ -25,7 +25,7 @@ If you want to use `vmn` in a more advanced way, visit its official GitHub page 
     release-candidate: <Boolean>                  # Set either release-candidate to start release candidate mode
     release: <Boolean>                            # Set true only when you want to release the release-candidate version  
     prerelease-name: <PRERELEASE_NAME>            # Default value is "rc"
-    stamp_from_version: <STAMP_FROM_VERSION>      # Optional: Overwrite the base that VMN stamp will work from
+    stamp-from-version: <STAMP_FROM_VERSION>      # Optional: Overwrite the base that VMN stamp will work from
 
     # Generator - For more info https://github.com/final-israel/vmn#vmn-gen 
     do-gen: <Boolean>                             # Mark to perform a generator

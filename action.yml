@@ -29,7 +29,7 @@ inputs:
   release: 
     type: boolean
     description: "Is it ready to be released?"
-  stamp_from_version:
+  stamp-from-version:
     type: string
     description: "Overwrite the base that VMN stamp will work from"
   do-gen:
