@@ -22,6 +22,7 @@ If you want to use `vmn` in a more advanced way, visit its official GitHub page 
     release: <Boolean>                        # Set true only when you want to release the release-candidate version  
     prerelease-name: <PRERELEASE_NAME>        # Default value is "rc"
     only-output-mode: <Boolean>               # Only return current version to verstr output
+    debug-mode: <Boolean>                     # Show extra logs to help us improve VMNA and VMN
     app-name: <APP_NAME>                      # Must be provided
 
 - name: Use the output from vmn action
