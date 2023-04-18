@@ -16100,6 +16100,8 @@ const fail = async (msg) => {
         core.info(`vmn log: ${out}`);
         out = await execute(`git status`);
         core.info(`git status:\n${out}`);
+        out = await execute(`git diff`);
+        core.info(`git diff:\n${out}`);
     }
     core.setFailed(`Error Massage: ${msg}`);
     process.exit(-1);
