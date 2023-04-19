@@ -57,14 +57,14 @@ const display_version = async (debug_mode, extra_args, app_name) => {
             is_in_rc_mode = true
         }
         let is_dirty = false
-        if ("dirty" in out_obj) {
+        if ("dirty" in out_verbose_obj) {
             is_dirty = true
             current_version += ".d";
         }
         core.setOutput("verstr", current_version);
         core.setOutput("dirty", is_dirty);
         core.setOutput("is_in_rc_mode", is_in_rc_mode);
-        core.setOutput("verbose_yaml", out_obj);
+        core.setOutput("verbose_yaml", out_verbose_obj);
 
         core.info(`vmn version: ${current_version}`)
         
@@ -282,6 +282,9 @@ const main = async () => {
             custom_yaml = `-c ${gen_custom_yaml_path}`
         }
         let out = await execute(`vmn gen -t ${gen_template_path} -o ${gen_output_path} ${custom_yaml} ${app_name}`);
+        if (out === "") {
+            out = "Success"
+        }
         core.info(`gen stdout: ${out}`);
         } catch (e) {
             await fail(`Error executing vmn gen ${e}`);
