@@ -16113,10 +16113,12 @@ const display_version = async (debug_mode, extra_args, app_name) => {
             out = await execute(`vmn ${extra_args} show --verbose ${app_name}`);
             core.info(`vmn ${extra_args} show --verbose ${app_name} stdout: ${out}`)
         }
-        out = await execute(`vmn show --verbose ${app_name}`);
-        let out_obj = YAML.load(out);
-        current_version = out_obj["version"];
-        version_type = out_obj["type"];
+        out_verbose = await execute(`vmn show --verbose ${app_name}`);
+        let out_verbose_obj = YAML.load(out_verbose);
+        out_type = await execute(`vmn show --type ${app_name}`);
+        let out_type_obj = YAML.load(out_type);
+        current_version = out_verbose_obj["version"];
+        version_type = out_type_obj["type"];
         is_in_rc_mode = false
         if (version_type != "release") {
             is_in_rc_mode = true

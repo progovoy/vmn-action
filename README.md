@@ -14,7 +14,7 @@ If you want to use `vmn` in a more advanced way, visit its official GitHub page 
 
 ```yaml
 - id: foo
-  uses: progovoy/vmn-action@vmna_0.1.62
+  uses: progovoy/vmn-action@vmna_0.1.63
   with:
     app-name: <APP_NAME>                          # Must be provided
 
@@ -80,7 +80,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.62
+      uses: progovoy/vmn-action@vmna_0.1.63
       with:
         do-stamp: ${{ inputs.stamp_version }}
         stamp-mode: ${{inputs.version_type}}
@@ -128,7 +128,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.62
+      uses: progovoy/vmn-action@vmna_0.1.63
       with:
         do-stamp: ${{ inputs.stamp_version }}
         stamp-mode: ${{ inputs.stamp_version }}
