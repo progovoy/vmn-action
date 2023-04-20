@@ -16091,23 +16091,26 @@ const execute = (command, skip_error=false) => new Promise((resolve, reject) => 
     });
 });
 
-const fail = async (msg) => {
+const fail = async (msg, show_log_on_error) => {
     core.info(`failed vmn`);
-    out = await execute(`[ -f .vmn/vmn.log ] && echo 1 || echo 0`);
-    if (out.includes("1"))
-    {
-        out = await execute(`cat .vmn/vmn.log`);
-        core.info(`vmn log: ${out}`);
-        out = await execute(`git status`);
-        core.info(`git status:\n${out}`);
-        out = await execute(`git diff`);
-        core.info(`git diff:\n${out}`);
+    if (show_log_on_error == "true") {    
+        out = await execute(`[ -f .vmn/vmn.log ] && echo 1 || echo 0`);
+        if (out.includes("1")) {
+            out = await execute(`cat .vmn/vmn.log`);
+            core.info(`vmn log: ${out}`);
+        } else {
+            core.info(`No log created yet. Try run with debug-mode for more information`)
+        }
     }
+    out = await execute(`git status`);
+    core.info(`git status:\n${out}`);
+    out = await execute(`git diff`);
+    core.info(`git diff:\n${out}`);
     core.setFailed(`Error Massage: ${msg}`);
     process.exit(-1);
 }
 
-const display_version = async (debug_mode, extra_args, app_name) => {
+const display_version = async (debug_mode, extra_args, app_name, show_log_on_error) => {
     try{ 
         if (debug_mode === "true") {
             out = await execute(`vmn ${extra_args} show --verbose ${app_name}`);
@@ -16137,9 +16140,74 @@ const display_version = async (debug_mode, extra_args, app_name) => {
         
         return;
     } catch (e) {
-        await fail(`Error executing vmn show --ignore-dirty ${e}`);
+        await fail(`Error executing vmn show --ignore-dirty ${e}`, show_log_on_error);
     }
 }
+
+const do_stamp_func = async (stamp_mode, release_candidate, prerelease_name, release, stamp_from_version, show_log_on_error, debug_mode) => {
+    try{
+        let stamp_params = ""
+        if (stamp_from_version !== "" ) {
+            stamp_params += `--ov ${stamp_from_version}`
+        }
+        let show_result = await execute(`vmn show --verbose ${app_name}`);
+        
+        let show_result_obj = YAML.load(show_result);
+        core.info(`show_result_obj["release_mode"]: ${show_result_obj["release_mode"]}`);
+
+        if (prerelease_name === "")
+        {
+            prerelease_name = "rc";
+        }
+
+        if (release === "true")
+        {
+            if (show_result_obj["release_mode"].includes("prerelease"))
+            {
+                out = await execute(`vmn ${extra_args} release ${app_name}`);
+                debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
+            }
+            else
+            {
+                await fail("Can't make release of non-prerelease version", show_log_on_error);
+            }
+
+        }
+        else if (release_candidate === "true")
+        {
+            if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
+            {
+                out = await execute(`vmn ${extra_args} stamp ${stamp_params} -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
+                debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
+            }
+            else if (show_result_obj["release_mode"].includes("prerelease"))
+            {
+                out = await execute(`vmn ${extra_args} stamp --pr ${prerelease_name} ${app_name}`);
+                debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
+            }
+            else
+            {
+                await fail("stamp-mode must be provided for first prerelease (major, minor, or patch)");
+            }
+        }
+        else
+        {
+            if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
+            {
+                out = await execute(`vmn ${extra_args} stamp ${stamp_params} ${stamp_params} -r ${stamp_mode} ${app_name}`);
+                debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
+            }
+            else
+            {
+                await fail("Invaild stamp-mode (major, minor, or patch)", show_log_on_error);
+            }
+        }
+
+        core.info(`stamp stdout: ${out}`);
+    } catch (e) {
+        await fail(`Error executing vmn stamp ${e}`, show_log_on_error);
+    }
+};
 
 
 const main = async () => {
@@ -16150,13 +16218,14 @@ const main = async () => {
     let release_candidate = core.getInput('release-candidate');
     let prerelease_name = core.getInput('prerelease-name');
     let release = core.getInput('release');
-    let stamp_from_version = core.getInput('stamp-from-version')
+    let stamp_from_version = core.getInput('stamp-from-version');
     
     let do_gen = core.getInput('do-gen');
     let gen_template_path = core.getInput('gen-template-path');
     let gen_output_path = core.getInput('gen-output-path');
     let gen_custom_yaml_path = core.getInput('gen-custom-yaml-path');
     
+    let show_log_on_error = core.getInput('show-log-on-error');
     let debug_mode = core.getInput('debug-mode');
     let install_nonstable_vmn_version = core.getInput('install-nonstable-vmn-version');
     core.info(`app_name: ${app_name}`);
@@ -16175,54 +16244,11 @@ const main = async () => {
         if (token == undefined)
         {
             await fail(
-                "Github Token Must Be Supplied As A 'token' Parameter Or As An 'GITHUB_TOKEN' Env Variable"
+                "Github Token Must Be Supplied As A 'token' Parameter Or As An 'GITHUB_TOKEN' Env Variable",
+                show_log_on_error
             );
         }
     }
-    const octokit = github.getOctokit(token);
-    const username = github.context.actor;
-    const permission_response = await octokit.rest.repos.getCollaboratorPermissionLevel({
-        ...github.context.repo,
-        username: username
-      });
-    let permission = permission_response.data.permission;
-    if (permission != "write" && permission != "admin")
-    {
-        await fail(
-            "Action must have write permission"
-        );
-    }
-
-    /*const protection_response = await octokit.rest.actions.getGithubActionsPermissionsRepository({
-        ...github.context.repo
-      });
-      core.info(`step 2`);
-    let protection = protection_response.data.can_approve_pull_request_reviews;
-    core.info(`step 3`);
-    // If protected branch than create new branch and work from there. In the end, marge the pull request to the original branch
-
-    core.info(`protection: ${protection}`);
-    */
-
-    // try{
-    //     let branch_name = getCurrentBranchName();
-
-    //     core.info(`branch_name is ${branch_name}`)
-
-    //     let new_branch_name = `${branch_name}-temp`
-
-    //     await execute(`git checkout -b ${new_branch_name}`);
-
-    //     if (!app_name) {
-    //         await fail(
-    //             "App Name parameter must be suplied"
-    //         );
-    //     }
-
-    //     core.info(`branch_name is ${new_branch_name}`)
-    // } catch (e) {
-    //     await fail(`Error branching to temp branch ${e}`);
-    // }
 
     let failed = true;
     let err_str = "";
@@ -16247,7 +16273,7 @@ const main = async () => {
     }
     if (failed)
     {
-        await fail(err_str);
+        await fail(err_str, show_log_on_error);
     }
     extra_args = ""
     if (debug_mode === "true") {
@@ -16262,87 +16288,78 @@ const main = async () => {
 
     if (do_stamp === "true") {
 
-        try{
-            let stamp_params = ""
-            if (stamp_from_version !== "" ) {
-                stamp_params += `--ov ${stamp_from_version}`
-            }
-            let show_result = await execute(`vmn show --verbose ${app_name}`);
-            
-            let show_result_obj = YAML.load(show_result);
-            core.info(`show_result_obj["release_mode"]: ${show_result_obj["release_mode"]}`);
-
-            if (prerelease_name === "")
-            {
-                prerelease_name = "rc";
-            }
-
-            if (release === "true")
-            {
-                if (show_result_obj["release_mode"].includes("prerelease"))
-                {
-                    out = await execute(`vmn ${extra_args} release ${app_name}`);
-                    debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
-                }
-                else
-                {
-                    await fail("Can't make release of non-prerelease version");
-                }
-
-            }
-            else if (release_candidate === "true")
-            {
-                if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
-                {
-                    out = await execute(`vmn ${extra_args} stamp ${stamp_params} -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
-                    debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
-                }
-                else if (show_result_obj["release_mode"].includes("prerelease"))
-                {
-                    out = await execute(`vmn ${extra_args} stamp --pr ${prerelease_name} ${app_name}`);
-                    debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
-                }
-                else
-                {
-                    await fail("stamp-mode must be provided for first prerelease (major, minor, or patch)");
-                }
-            }
-            else
-            {
-                if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
-                {
-                    out = await execute(`vmn ${extra_args} stamp ${stamp_params} ${stamp_params} -r ${stamp_mode} ${app_name}`);
-                    debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
-                }
-                else
-                {
-                    await fail("Invaild stamp-mode (major, minor, or patch)");
-                }
-            }
-
-            // if (protected)
-            // {
-            //     // If protected than marge new pull request from created branch to the original branch
-            //     const marge_response = await octokit.rest.pulls.merge({
-            //         ...github.context.repo,
-            //         pull_number: new_pull_number
-            //       });
-
-            //     let marge = protection_response.data.merged;
-
-            //     core.info(`marge: ${marge}`);
-            // }
-
-            core.info(`stamp stdout: ${out}`);
-        } catch (e) {
-            await fail(`Error executing vmn stamp ${e}`);
+        const octokit = github.getOctokit(token);
+        const username = github.context.actor;
+        const permission_response = await octokit.rest.repos.getCollaboratorPermissionLevel({
+            ...github.context.repo,
+            username: username
+        });
+        let permission = permission_response.data.permission;
+        if (permission != "write" && permission != "admin")
+        {
+            await fail(
+                "Action must have write permission",
+                show_log_on_error
+            );
         }
+
+        const protection_response = await octokit.rest.repos.getBranchProtection({
+            ...github.context.repo,
+            branch: github.context.branch
+        });
+
+        core.info(`protection_response: ${protection_response}`);
+
+        /*const protection_response = await octokit.rest.actions.getGithubActionsPermissionsRepository({
+            ...github.context.repo
+        });
+        core.info(`step 2`);
+        let protection = protection_response.data.can_approve_pull_request_reviews;
+        core.info(`step 3`);
+        // If protected branch than create new branch and work from there. In the end, marge the pull request to the original branch
+
+        core.info(`protection: ${protection}`);
+        */
+
+        // try{
+        //     let branch_name = getCurrentBranchName();
+
+        //     core.info(`branch_name is ${branch_name}`)
+
+        //     let new_branch_name = `${branch_name}-temp`
+
+        //     await execute(`git checkout -b ${new_branch_name}`);
+
+        //     if (!app_name) {
+        //         await fail(
+        //             "App Name parameter must be suplied"
+        //         );
+        //     }
+
+        //     core.info(`branch_name is ${new_branch_name}`)
+        // } catch (e) {
+        //     await fail(`Error branching to temp branch ${e}`);
+        // }
+
+        do_stamp_func(stamp_mode, release_candidate, prerelease_name, release, stamp_from_version, show_log_on_error, debug_mode);
+        // if (protected)
+        // {
+        //     // If protected than marge new pull request from created branch to the original branch
+        //     const marge_response = await octokit.rest.pulls.merge({
+        //         ...github.context.repo,
+        //         pull_number: new_pull_number
+        //       });
+
+        //     let marge = protection_response.data.merged;
+
+        //     core.info(`marge: ${marge}`);
+        // }
     }
 
     if (do_gen === "true") {
         try{
         if (gen_template_path === "" || gen_output_path === "") {
-            await fail(`gen_template_path and gen_output_path are required`);
+            await fail(`gen_template_path and gen_output_path are required`, show_log_on_error);
         }
         let custom_yaml = ""
         if (gen_custom_yaml_path !== "") {
@@ -16354,14 +16371,14 @@ const main = async () => {
         }
         core.info(`gen stdout: ${out}`);
         } catch (e) {
-            await fail(`Error executing vmn gen ${e}`);
+            await fail(`Error executing vmn gen ${e}`, show_log_on_error);
         }
     }
 
     try{
         await display_version(debug_mode, extra_args, app_name);
     } catch (e) {
-        await fail(`Error executing vmn show ${e}`);
+        await fail(`Error executing vmn show ${e}`, show_log_on_error);
     }
 }
 

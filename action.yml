@@ -44,6 +44,9 @@ inputs:
   gen-custom-yaml-path:
     type: string
     description: "Customs params YAML file path"
+  show-log-on-error:
+    type: boolean
+    description: "Do you want to see the VMN log on error?"
   debug-mode:
     type: boolean
     description: "Show extra logs?"
