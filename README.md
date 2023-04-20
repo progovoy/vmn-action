@@ -34,6 +34,7 @@ If you want to use `vmn` in a more advanced way, visit its official GitHub page 
     gen-custom-yaml-path: <GEN_CUSTOM_YAML_PATH>  # Customs params YAML file path
 
     # Advanced Flags
+    show-log-on-error: <Boolean>                  # Do you want to see the VMN log on error?
     debug-mode: <Boolean>                         # Show extra logs to help us improve VMNA and VMN
     install-nonstable-vmn-version: <Boolean>      # Install latest rc version of VMN
   env:
