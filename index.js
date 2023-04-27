@@ -10,6 +10,7 @@ const { Octokit } = require("@octokit/rest");
 let out;
 
 const execute = (command, skip_error=false) => new Promise((resolve, reject) => {
+    core.info(`executing: ${command}`);
     childProcess.exec(command, (error, stdout, stderr) => {
         if ((error || stderr) && !skip_error) {
             reject(stderr);
@@ -142,6 +143,25 @@ const do_stamp_func = async (stamp_mode, release_candidate, prerelease_name, rel
     }
 };
 
+const do_gen_func = async (gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode) => {
+    try{
+        if (gen_template_path === "" || gen_output_path === "") {
+            await fail(`gen_template_path and gen_output_path are required`, show_log_on_error);
+        }
+        let custom_yaml = ""
+        if (gen_custom_yaml_path !== "") {
+            custom_yaml = `-c ${gen_custom_yaml_path}`
+        }
+        let out = await execute(`vmn gen -t ${gen_template_path} -o ${gen_output_path} ${custom_yaml} ${app_name}`);
+        if (out === "") {
+            out = "Success"
+        }
+        core.info(`gen stdout: ${out}`);
+    } catch (e) {
+        await fail(`Error executing vmn gen ${e}`, show_log_on_error);
+    }
+}
+
 
 const main = async () => {
     let app_name = core.getInput('app-name');
@@ -236,12 +256,12 @@ const main = async () => {
             );
         }
 
-        const protection_response = await octokit.rest.repos.getBranchProtection({
+        /*const protection_response = await octokit.rest.repos.getBranchProtection({
             ...github.context.repo,
             branch: github.context.branch
         });
 
-        core.info(`protection_response: ${protection_response}`);
+        core.info(`protection_response: ${protection_response}`);*/
 
         /*const protection_response = await octokit.rest.actions.getGithubActionsPermissionsRepository({
             ...github.context.repo
@@ -290,22 +310,7 @@ const main = async () => {
     }
 
     if (do_gen === "true") {
-        try{
-        if (gen_template_path === "" || gen_output_path === "") {
-            await fail(`gen_template_path and gen_output_path are required`, show_log_on_error);
-        }
-        let custom_yaml = ""
-        if (gen_custom_yaml_path !== "") {
-            custom_yaml = `-c ${gen_custom_yaml_path}`
-        }
-        let out = await execute(`vmn gen -t ${gen_template_path} -o ${gen_output_path} ${custom_yaml} ${app_name}`);
-        if (out === "") {
-            out = "Success"
-        }
-        core.info(`gen stdout: ${out}`);
-        } catch (e) {
-            await fail(`Error executing vmn gen ${e}`, show_log_on_error);
-        }
+        do_gen_func(gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode);
     }
 
     try{
