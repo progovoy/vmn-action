@@ -78,7 +78,7 @@ const display_version = async (debug_mode, extra_args, app_name, show_log_on_err
     }
 }
 
-const do_stamp_func = async (stamp_mode, release_candidate, prerelease_name, release, stamp_from_version, show_log_on_error, debug_mode) => {
+const do_stamp_func = async (app_name, stamp_mode, release_candidate, prerelease_name, release, stamp_from_version, show_log_on_error, debug_mode) => {
     try{
         let stamp_params = ""
         if (stamp_from_version !== "" ) {
@@ -143,7 +143,7 @@ const do_stamp_func = async (stamp_mode, release_candidate, prerelease_name, rel
     }
 };
 
-const do_gen_func = async (gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode) => {
+const do_gen_func = async (app_name, gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode) => {
     try{
         if (gen_template_path === "" || gen_output_path === "") {
             await fail(`gen_template_path and gen_output_path are required`, show_log_on_error);
@@ -294,7 +294,7 @@ const main = async () => {
         //     await fail(`Error branching to temp branch ${e}`);
         // }
 
-        do_stamp_func(stamp_mode, release_candidate, prerelease_name, release, stamp_from_version, show_log_on_error, debug_mode);
+        do_stamp_func(app_name, stamp_mode, release_candidate, prerelease_name, release, stamp_from_version, show_log_on_error, debug_mode);
         // if (protected)
         // {
         //     // If protected than marge new pull request from created branch to the original branch
@@ -310,7 +310,7 @@ const main = async () => {
     }
 
     if (do_gen === "true") {
-        do_gen_func(gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode);
+        do_gen_func(app_name, gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode);
     }
 
     try{
