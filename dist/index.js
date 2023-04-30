@@ -16176,13 +16176,8 @@ const do_stamp_func = async (app_name, stamp_mode, release_candidate, prerelease
         }
         else if (release_candidate === "true")
         {
-            if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
+            if (stamp_mode.includes("major") || stamp_mode.includes("minor") || stamp_mode.includes("patch"))
             {
-                core.info(`stamp_mode.substring('major') || stamp_mode.substring('minor') || stamp_mode.substring('patch'): ${stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch")}`)
-                core.info(`stamp_mode.substring("major"): ${stamp_mode.substring("major")}`)
-                core.info(`stamp_mode.substring("minor"): ${stamp_mode.substring("minor")}`)
-                core.info(`stamp_mode.substring("patch"): ${stamp_mode.substring("patch")}`)
-                core.info(`stamp_mode: ${stamp_mode}`)
                 out = await execute(`vmn ${extra_args} stamp ${stamp_params} -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
                 debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
             }
@@ -16198,7 +16193,7 @@ const do_stamp_func = async (app_name, stamp_mode, release_candidate, prerelease
         }
         else
         {
-            if (stamp_mode.substring("major") || stamp_mode.substring("minor") || stamp_mode.substring("patch"))
+            if (stamp_mode.includes("major") || stamp_mode.includes("minor") || stamp_mode.includes("patch"))
             {
                 out = await execute(`vmn ${extra_args} stamp ${stamp_params} ${stamp_params} -r ${stamp_mode} ${app_name}`);
                 debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
