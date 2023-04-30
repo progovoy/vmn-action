@@ -15,10 +15,11 @@ inputs:
     type: choice
     description: "Desired Stamp Mode"
     options:
+      - none
       - major
       - minor
       - patch
-    default: patch
+    default: none
   release-candidate: 
     type: boolean
     description: "Is it Release Candidate?"
