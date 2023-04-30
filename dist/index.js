@@ -16361,7 +16361,7 @@ const main = async () => {
         //     await fail(`Error branching to temp branch ${e}`);
         // }
 
-        do_stamp_func(app_name, stamp_mode, release_candidate, prerelease_name, release, stamp_from_version, extra_args, show_log_on_error, debug_mode);
+        await do_stamp_func(app_name, stamp_mode, release_candidate, prerelease_name, release, stamp_from_version, extra_args, show_log_on_error, debug_mode);
         // if (protected)
         // {
         //     // If protected than marge new pull request from created branch to the original branch
@@ -16377,7 +16377,7 @@ const main = async () => {
     }
 
     if (do_gen === "true") {
-        do_gen_func(app_name, gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode);
+        await do_gen_func(app_name, gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode);
     }
 
     try{
