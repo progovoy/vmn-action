@@ -27,7 +27,7 @@ VMN Generator info - <https://github.com/final-israel/vmn#vmn-gen>
 
 ```yaml
 - id: foo
-  uses: progovoy/vmn-action@vmna_0.1.71
+  uses: progovoy/vmn-action@vmna_0.1.72
   with:
     app-name: <APP_NAME>                          # Must be provided
 
@@ -39,6 +39,7 @@ VMN Generator info - <https://github.com/final-israel/vmn#vmn-gen>
     release: <Boolean>                            # Set true only when you want to release the release-candidate version  
     prerelease-name: <PRERELEASE_NAME>            # Name of Prereleased Version (<VERSION>-<PRERELEASE_NAME><SERIAL_NUMBER>). Default value is "rc"
     stamp-from-version: <STAMP_FROM_VERSION>      # Optional: Overwrite the base that VMN stamp will work from
+    skip-version: <Boolean>                       # Optional: Skip versions between Release Candidates
 
     # Generator - For more info https://github.com/final-israel/vmn#vmn-gen 
     do-gen: <Boolean>                             # Mark to perform a generator
@@ -56,10 +57,10 @@ VMN Generator info - <https://github.com/final-israel/vmn#vmn-gen>
 
 - name: Use the output from vmn action
   run: |
-    echo "The Version is: ${{steps.foo.outputs.verstr}}"
-    echo "Is the code dirty?: ${{steps.foo.outputs.dirty}}"
-    echo "Is the app in Release Candidate Mode: ${{steps.foo.outputs.is_in_rc_mode}}"
-    echo "The whole vmn show for you to parser is: ${{steps.foo.outputs.verbose_yaml}}"
+    echo "The Version is: ${{ steps.foo.outputs.verstr }}"
+    echo "Is the code dirty?: ${{ steps.foo.outputs.dirty }}"
+    echo "Is the app in Release Candidate Mode: ${{ steps.foo.outputs.is_in_rc_mode }}"
+    echo "The whole vmn show for you to parser is: ${{ steps.foo.outputs.verbose_yaml }}"
 
 ```
 
@@ -106,6 +107,9 @@ on:
       stamp_from_version:
         type: string
         description: Overwrite the base that VMN stamp will work from
+      skip-version:
+        type: boolean
+        description: Do you want to skip versions between Release Candidates?
       do_gen:
         type: boolean
         description: Create a generated version file?
@@ -140,31 +144,32 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.71
+      uses: progovoy/vmn-action@vmna_0.1.72
       with:
-        app-name: ${{inputs.app_name}}
+        app-name: ${{ inputs.app_name }}
         do-stamp: ${{ inputs.do_stamp }}
-        stamp-mode: ${{inputs.stamp_mode }}
-        release-candidate: ${{inputs.release_candidate }}
-        release: ${{inputs.release }}
-        prerelease-name: ${{inputs.prerelease_name }}
-        stamp-from-version: ${{inputs.stamp_from_version }}
-        do-gen: ${{inputs.do_gen }}
-        gen-template-path: ${{inputs.gen_template_path }}
-        gen-output-path: ${{inputs.gen_output_path }}
-        gen-custom-yaml-path: ${{inputs.gen_custom_yaml_path }}
-        show-log-on-error: ${{inputs.show_log_on_error }}
-        debug-mode: ${{inputs.debug_mode }}
-        install-nonstable-vmn-version: ${{inputs.install_nonstable_vmn_version }}
+        stamp-mode: ${{ inputs.stamp_mode }}
+        release-candidate: ${{ inputs.release_candidate }}
+        release: ${{ inputs.release }}
+        prerelease-name: ${{ inputs.prerelease_name }}
+        stamp-from-version: ${{ inputs.stamp_from_version }}
+        skip-version: ${{ inputs.skip_version }}
+        do-gen: ${{ inputs.do_gen }}
+        gen-template-path: ${{ inputs.gen_template_path }}
+        gen-output-path: ${{ inputs.gen_output_path }}
+        gen-custom-yaml-path: ${{ inputs.gen_custom_yaml_path }}
+        show-log-on-error: ${{ inputs.show_log_on_error }}
+        debug-mode: ${{ inputs.debug_mode }}
+        install-nonstable-vmn-version: ${{ inputs.install_nonstable_vmn_version }}
       env:
         GITHUB_TOKEN: ${{ github.token }} 
      
     - name: Use the output from vmn action
       run: |
-        echo "The Version is: ${{steps.foo.outputs.verstr}}"
-        echo "Is the code dirty?: ${{steps.foo.outputs.dirty}}"
-        echo "Is the app in Release Candidate Mode: ${{steps.foo.outputs.is_in_rc_mode}}"
-        echo "The whole vmn show for you to parser is: ${{steps.foo.outputs.verbose_yaml}}"
+        echo "The Version is: ${{ steps.foo.outputs.verstr }}"
+        echo "Is the code dirty?: ${{ steps.foo.outputs.dirty }}"
+        echo "Is the app in Release Candidate Mode: ${{ steps.foo.outputs.is_in_rc_mode }}"
+        echo "The whole vmn show for you to parser is: ${{ steps.foo.outputs.verbose_yaml }}"
 
  ```
 
@@ -201,17 +206,17 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.71
+      uses: progovoy/vmn-action@vmna_0.1.72
       with:
-        app-name: ${{inputs.app_name}}
+        app-name: ${{ inputs.app_name }}
         do-stamp: ${{ inputs.do_stamp }}
-        stamp-mode: ${{inputs.stamp_mode}}
+        stamp-mode: ${{ inputs.stamp_mode }}
       env:
         GITHUB_TOKEN: ${{ github.token }} 
      
     - name: Use the output from vmn action
       run: |
-        echo "${{steps.foo.outputs.verstr}}"
+        echo "${{ steps.foo.outputs.verstr }}"
 
  ```
 
@@ -252,20 +257,20 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.71
+      uses: progovoy/vmn-action@vmna_0.1.72
       with:
-        app-name: ${{inputs.app_name}}
+        app-name: ${{ inputs.app_name }}
         do-stamp: ${{ inputs.do_stamp }}
         stamp-mode: ${{ inputs.stamp_mode }}
         release-candidate: true
         release: false
-        prerelease-name: ${{inputs.prerelease_name}}
+        prerelease-name: ${{ inputs.prerelease_name }}
       env:
         GITHUB_TOKEN: ${{ github.token }} 
      
     - name: Use the output from vmn action
       run: |
-        echo "${{steps.foo.outputs.verstr}}"
+        echo "${{ steps.foo.outputs.verstr }}"
 
  ```
 
@@ -296,19 +301,19 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.71
+      uses: progovoy/vmn-action@vmna_0.1.72
       with:
-        app-name: ${{inputs.app_name}}
+        app-name: ${{ inputs.app_name }}
         do-stamp: ${{ inputs.do_stamp }}
         release-candidate: true
         release: false
-        prerelease-name: ${{inputs.prerelease_name}}
+        prerelease-name: ${{ inputs.prerelease_name }}
       env:
         GITHUB_TOKEN: ${{ github.token }} 
      
     - name: Use the output from vmn action
       run: |
-        echo "${{steps.foo.outputs.verstr}}"
+        echo "${{ steps.foo.outputs.verstr }}"
 
  ```
 
@@ -337,9 +342,9 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.71
+      uses: progovoy/vmn-action@vmna_0.1.72
       with:
-        app-name: ${{inputs.app_name}}
+        app-name: ${{ inputs.app_name }}
         do-stamp: ${{ inputs.do_stamp }}
         release: true
       env:
@@ -347,7 +352,7 @@ jobs:
      
     - name: Use the output from vmn action
       run: |
-        echo "${{steps.foo.outputs.verstr}}"
+        echo "${{ steps.foo.outputs.verstr }}"
 
  ```
 
@@ -384,9 +389,9 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.71
+      uses: progovoy/vmn-action@vmna_0.1.72
       with:
-        app-name: ${{inputs.app_name}}
+        app-name: ${{ inputs.app_name }}
         do-gen: ${{ inputs.do_gen }}
         gen-template-path: ${{ inputs.gen_template_path }}
         gen-output-path: ${{ inputs.gen_output_path }}

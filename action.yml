@@ -33,6 +33,9 @@ inputs:
   stamp-from-version:
     type: string
     description: "Overwrite the base that VMN stamp will work from"
+  skip-version: 
+    type: boolean
+    description: "Do you want to skip versions between Release Candidates?"
   do-gen:
     type: boolean
     description: "Do you want to perform a generator?"
