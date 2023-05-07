@@ -27,7 +27,7 @@ VMN Generator info - <https://github.com/final-israel/vmn#vmn-gen>
 
 ```yaml
 - id: foo
-  uses: progovoy/vmn-action@vmna_0.1.72
+  uses: progovoy/vmn-action@vmna_0.1.73
   with:
     app-name: <APP_NAME>                          # Must be provided
 
@@ -144,7 +144,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.72
+      uses: progovoy/vmn-action@vmna_0.1.73
       with:
         app-name: ${{ inputs.app_name }}
         do-stamp: ${{ inputs.do_stamp }}
@@ -206,7 +206,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.72
+      uses: progovoy/vmn-action@vmna_0.1.73
       with:
         app-name: ${{ inputs.app_name }}
         do-stamp: ${{ inputs.do_stamp }}
@@ -257,7 +257,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.72
+      uses: progovoy/vmn-action@vmna_0.1.73
       with:
         app-name: ${{ inputs.app_name }}
         do-stamp: ${{ inputs.do_stamp }}
@@ -301,7 +301,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.72
+      uses: progovoy/vmn-action@vmna_0.1.73
       with:
         app-name: ${{ inputs.app_name }}
         do-stamp: ${{ inputs.do_stamp }}
@@ -342,7 +342,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.72
+      uses: progovoy/vmn-action@vmna_0.1.73
       with:
         app-name: ${{ inputs.app_name }}
         do-stamp: ${{ inputs.do_stamp }}
@@ -389,7 +389,7 @@ jobs:
     - uses: actions/checkout@v2.5.0
 
     - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.72
+      uses: progovoy/vmn-action@vmna_0.1.73
       with:
         app-name: ${{ inputs.app_name }}
         do-gen: ${{ inputs.do_gen }}
