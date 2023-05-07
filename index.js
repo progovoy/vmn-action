@@ -79,7 +79,17 @@ const display_version = async (debug_mode, extra_args, app_name, show_log_on_err
 }
 
 const do_stamp_func = async (
-    app_name, stamp_mode, skip_version, release_candidate, prerelease_name, release, stamp_from_version, extra_args, show_log_on_error, debug_mode) => {
+    app_name, 
+    stamp_mode, 
+    skip_version, 
+    release_candidate, 
+    prerelease_name, 
+    release, 
+    stamp_from_version, 
+    extra_args, 
+    show_log_on_error, 
+    debug_mode, 
+    install_nonstable_vmn_version) => {
     try{
         let stamp_params = ""
         if (stamp_from_version !== "" ) {
@@ -115,9 +125,9 @@ const do_stamp_func = async (
                 out  = await execute(`vmn ${extra_args} stamp ${stamp_params} -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
                 debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
             }
-            if (stamp_mode.includes("major") || stamp_mode.includes("minor") || stamp_mode.includes("patch"))
+            if (install_nonstable_vmn_version === "true" && (stamp_mode.includes("major") || stamp_mode.includes("minor") || stamp_mode.includes("patch")))
             {
-                out  = await execute(`vmn ${extra_args} stamp ${stamp_params} --or ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
+                out  = await execute(`vmn ${extra_args} stamp ${stamp_params} --orm ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
                 debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
             }
             else if (show_result_obj["release_mode"].includes("prerelease"))
@@ -150,7 +160,7 @@ const do_stamp_func = async (
 };
 
 const do_gen_func = async (
-    app_name, gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode) => {
+    app_name, gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode, install_nonstable_vmn_version) => {
     try{
         if (gen_template_path === "" || gen_output_path === "") {
             await fail(`gen_template_path and gen_output_path are required`, show_log_on_error);
@@ -267,7 +277,8 @@ const main = async () => {
             stamp_from_version, 
             extra_args, 
             show_log_on_error, 
-            debug_mode);
+            debug_mode,
+            install_nonstable_vmn_version);
     }
 
     if (do_gen === "true") {
@@ -277,7 +288,8 @@ const main = async () => {
             gen_output_path, 
             gen_custom_yaml_path, 
             show_log_on_error, 
-            debug_mode);
+            debug_mode,
+            install_nonstable_vmn_version);
     }
 
     try{
