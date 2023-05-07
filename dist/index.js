@@ -16145,7 +16145,18 @@ const display_version = async (debug_mode, extra_args, app_name, show_log_on_err
     }
 }
 
-const do_stamp_func = async (app_name, stamp_mode, release_candidate, prerelease_name, release, stamp_from_version, extra_args, show_log_on_error, debug_mode) => {
+const do_stamp_func = async (
+    app_name, 
+    stamp_mode, 
+    skip_version, 
+    release_candidate, 
+    prerelease_name, 
+    release, 
+    stamp_from_version, 
+    extra_args, 
+    show_log_on_error, 
+    debug_mode, 
+    install_nonstable_vmn_version) => {
     try{
         let stamp_params = ""
         if (stamp_from_version !== "" ) {
@@ -16176,9 +16187,14 @@ const do_stamp_func = async (app_name, stamp_mode, release_candidate, prerelease
         }
         else if (release_candidate === "true")
         {
-            if (stamp_mode.includes("major") || stamp_mode.includes("minor") || stamp_mode.includes("patch"))
+            if (skip_version === "true" && (stamp_mode.includes("major") || stamp_mode.includes("minor") || stamp_mode.includes("patch")))
             {
-                out = await execute(`vmn ${extra_args} stamp ${stamp_params} -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
+                out  = await execute(`vmn ${extra_args} stamp ${stamp_params} -r ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
+                debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
+            }
+            if (install_nonstable_vmn_version === "true" && (stamp_mode.includes("major") || stamp_mode.includes("minor") || stamp_mode.includes("patch")))
+            {
+                out  = await execute(`vmn ${extra_args} stamp ${stamp_params} --orm ${stamp_mode} --pr ${prerelease_name} ${app_name}`);
                 debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
             }
             else if (show_result_obj["release_mode"].includes("prerelease"))
@@ -16210,7 +16226,8 @@ const do_stamp_func = async (app_name, stamp_mode, release_candidate, prerelease
     }
 };
 
-const do_gen_func = async (app_name, gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode) => {
+const do_gen_func = async (
+    app_name, gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode, install_nonstable_vmn_version) => {
     try{
         if (gen_template_path === "" || gen_output_path === "") {
             await fail(`gen_template_path and gen_output_path are required`, show_log_on_error);
@@ -16235,6 +16252,7 @@ const main = async () => {
     
     let do_stamp = core.getInput('do-stamp');
     let stamp_mode = core.getInput('stamp-mode');
+    let skip_version = core.getInput('skip-version')
     let release_candidate = core.getInput('release-candidate');
     let prerelease_name = core.getInput('prerelease-name');
     let release = core.getInput('release');
@@ -16248,13 +16266,6 @@ const main = async () => {
     let show_log_on_error = core.getInput('show-log-on-error');
     let debug_mode = core.getInput('debug-mode');
     let install_nonstable_vmn_version = core.getInput('install-nonstable-vmn-version');
-    core.info(`app_name: ${app_name}`);
-    core.info(`stamp_mode: ${stamp_mode}`);
-    core.info(`release_candidate: ${release_candidate}`);
-    core.info(`prerelease_name: ${prerelease_name}`);
-    core.info(`do_stamp: ${do_stamp}`);
-    core.info(`debug_mode: ${debug_mode}`);
-    core.info(`release: ${release}`);
     let protected = false;
     let new_pull_number = 0;
     let token = core.getInput('token');
@@ -16323,61 +16334,29 @@ const main = async () => {
             );
         }
 
-        /*const protection_response = await octokit.rest.repos.getBranchProtection({
-            ...github.context.repo,
-            branch: github.context.branch
-        });
-
-        core.info(`protection_response: ${protection_response}`);*/
-
-        /*const protection_response = await octokit.rest.actions.getGithubActionsPermissionsRepository({
-            ...github.context.repo
-        });
-        core.info(`step 2`);
-        let protection = protection_response.data.can_approve_pull_request_reviews;
-        core.info(`step 3`);
-        // If protected branch than create new branch and work from there. In the end, marge the pull request to the original branch
-
-        core.info(`protection: ${protection}`);
-        */
-
-        // try{
-        //     let branch_name = getCurrentBranchName();
-
-        //     core.info(`branch_name is ${branch_name}`)
-
-        //     let new_branch_name = `${branch_name}-temp`
-
-        //     await execute(`git checkout -b ${new_branch_name}`);
-
-        //     if (!app_name) {
-        //         await fail(
-        //             "App Name parameter must be suplied"
-        //         );
-        //     }
-
-        //     core.info(`branch_name is ${new_branch_name}`)
-        // } catch (e) {
-        //     await fail(`Error branching to temp branch ${e}`);
-        // }
-
-        await do_stamp_func(app_name, stamp_mode, release_candidate, prerelease_name, release, stamp_from_version, extra_args, show_log_on_error, debug_mode);
-        // if (protected)
-        // {
-        //     // If protected than marge new pull request from created branch to the original branch
-        //     const marge_response = await octokit.rest.pulls.merge({
-        //         ...github.context.repo,
-        //         pull_number: new_pull_number
-        //       });
-
-        //     let marge = protection_response.data.merged;
-
-        //     core.info(`marge: ${marge}`);
-        // }
+        await do_stamp_func(
+            app_name, 
+            stamp_mode, 
+            skip_version, 
+            release_candidate, 
+            prerelease_name, 
+            release, 
+            stamp_from_version, 
+            extra_args, 
+            show_log_on_error, 
+            debug_mode,
+            install_nonstable_vmn_version);
     }
 
     if (do_gen === "true") {
-        await do_gen_func(app_name, gen_template_path, gen_output_path, gen_custom_yaml_path, show_log_on_error, debug_mode);
+        await do_gen_func(
+            app_name, 
+            gen_template_path, 
+            gen_output_path, 
+            gen_custom_yaml_path, 
+            show_log_on_error, 
+            debug_mode,
+            install_nonstable_vmn_version);
     }
 
     try{
