@@ -218,26 +218,29 @@ const main = async () => {
     let err_str = "";
     let pre_version = "";
     if (install_nonstable_vmn_version === "true") {
-        pre_version += "--pre -U"
+        pre_version += "--pre"
     }
+    await execute("export PATH=\"$PATH:/home/github/.local/bin\"");
     try{
-        await execute(`sudo pip install ${pre_version} vmn`);
+        await execute(`sudo pip install ${pre_version} -U vmn`);
         failed = false;
     } catch (e) {
-        err_str = `Error executing pip install ${pre_version} ${e}`;
+        err_str = `Error executing pip install ${pre_version} -U ${e}`;
     }
     if (failed)
     {
         try{
-            await execute(`pip install ${pre_version} vmn`);
+            await execute(`pip install ${pre_version} -U vmn`);
             failed = false;
         } catch (e) {
             err_str += `Error executing pip install ${e}`;
         }
     }
-    if (failed)
-    {
-        await fail(err_str, show_log_on_error);
+    try {
+        await execute("vmn --version");
+    }
+    catch (e) {
+        await fail(`vmn was not installed. See error: ${err_str}`);
     }
     extra_args = ""
     if (debug_mode === "true") {
