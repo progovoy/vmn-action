@@ -16304,7 +16304,8 @@ const main = async () => {
         }
     }
     try {
-        await execute("vmn --version");
+        out = await execute("vmn --version");
+        core.info(`vmn version: ${out}`);
     }
     catch (e) {
         await fail(`vmn was not installed. See error: ${err_str}`);
