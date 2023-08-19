@@ -16299,7 +16299,7 @@ const main = async () => {
     if (failed)
     {
         try{
-            await execute(`pip install ${pre_version} -U vmn`);
+            await execute(`pip install ${pre_version}`);
             failed = false;
         } catch (e) {
             err_str += `Error executing pip install ${e}`;
