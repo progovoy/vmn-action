@@ -218,7 +218,7 @@ const main = async () => {
     let err_str = "";
     let pre_version = "";
     if (install_nonstable_vmn_version === "true") {
-        pre_version += "-U vmn==0.8.5-rc2"
+        pre_version += "--pre -U vmn"
     } else {
         pre_version += "-U vmn"
     }
