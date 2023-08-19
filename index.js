@@ -218,9 +218,9 @@ const main = async () => {
     let err_str = "";
     let pre_version = "";
     if (install_nonstable_vmn_version === "true") {
-        pre_version += "--pre -U vmn"
+        pre_version += " --pre -U vmn"
     } else {
-        pre_version += "-U vmn"
+        pre_version += " -U vmn"
     }
     await execute("export PATH=\"$PATH:/home/github/.local/bin\"");
     try{
