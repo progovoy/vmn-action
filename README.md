@@ -29,30 +29,30 @@ VMN Generator info - <https://github.com/final-israel/vmn#vmn-gen>
 - id: foo
   uses: progovoy/vmn-action@vmna_0.1.73
   with:
-    app-name: <APP_NAME>                          # Must be provided
+    app-name: <APP_NAME>                            # Must be provided
 
     # Stamping - For more info https://github.com/final-israel/vmn#4-vmn-stamp
-    do-stamp: <Boolean>                           # Mark to perform a stamp
-    stamp-mode: {none, major, minor, patch}       # select "none" only when you want to continue the rc part and only after the first rc stamp. 
-                                                  #   For the first rc stamp you need one of the (patch, minor, major) options combined with release-candidate
-    release-candidate: <Boolean>                  # Set either release-candidate to start release candidate mode
-    release: <Boolean>                            # Set true only when you want to release the release-candidate version  
-    prerelease-name: <PRERELEASE_NAME>            # Name of Prereleased Version (<VERSION>-<PRERELEASE_NAME><SERIAL_NUMBER>). Default value is "rc"
-    stamp-from-version: <STAMP_FROM_VERSION>      # Optional: Overwrite the base that VMN stamp will work from
-    skip-version: <Boolean>                       # Optional: Skip versions between Release Candidates
+    do-stamp: <Boolean>                             # Mark to perform a stamp
+    stamp-mode: {none, major, minor, patch, hotfix} # select "none" only when you want to continue the rc part and only after the first rc stamp. 
+                                                    #   For the first rc stamp you need one of the (patch, minor, major) options combined with release-candidate
+    release-candidate: <Boolean>                    # Set either release-candidate to start release candidate mode
+    release: <Boolean>                              # Set true only when you want to release the release-candidate version  
+    prerelease-name: <PRERELEASE_NAME>              # Name of Prereleased Version (<VERSION>-<PRERELEASE_NAME><SERIAL_NUMBER>). Default value is "rc"
+    stamp-from-version: <STAMP_FROM_VERSION>        # Optional: Overwrite the base that VMN stamp will work from
+    skip-version: <Boolean>                         # Optional: Skip versions between Release Candidates
 
     # Generator - For more info https://github.com/final-israel/vmn#vmn-gen 
-    do-gen: <Boolean>                             # Mark to perform a generator
-    gen-template-path: <GEN_TEMPLATE_PATH>        # Jinja2 Template path
-    gen-output-path: <GEN_OUTPUT_PATH>            # Saving path
-    gen-custom-yaml-path: <GEN_CUSTOM_YAML_PATH>  # Customs params YAML file path
+    do-gen: <Boolean>                               # Mark to perform a generator
+    gen-template-path: <GEN_TEMPLATE_PATH>          # Jinja2 Template path
+    gen-output-path: <GEN_OUTPUT_PATH>              # Saving path
+    gen-custom-yaml-path: <GEN_CUSTOM_YAML_PATH>    # Customs params YAML file path
 
     # Advanced Flags
-    show-log-on-error: <Boolean>                  # Do you want to see the VMN log on error?
-    debug-mode: <Boolean>                         # Show extra logs to help us improve VMNA and VMN
-    install-nonstable-vmn-version: <Boolean>      # Install latest rc version of VMN
+    show-log-on-error: <Boolean>                    # Do you want to see the VMN log on error?
+    debug-mode: <Boolean>                           # Show extra logs to help us improve VMNA and VMN
+    install-nonstable-vmn-version: <Boolean>        # Install latest rc version of VMN
   env:
-    GITHUB_TOKEN: ${{ github.token }}         # For permission checks
+    GITHUB_TOKEN: ${{ github.token }}               # For permission checks
     
 
 - name: Use the output from vmn action
@@ -92,6 +92,7 @@ on:
         - patch
         - minor
         - major
+        - hotfix
         required: true
       release_candidate:
         type: boolean
@@ -197,6 +198,7 @@ on:
         - patch
         - minor
         - major
+        - hotfix
         required: true
 
 jobs:
@@ -246,6 +248,7 @@ on:
         - patch
         - minor
         - major
+        - hotfix
         required: true
       prerelease_name:
         description: Prerelease name
