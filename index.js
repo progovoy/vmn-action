@@ -142,14 +142,14 @@ const do_stamp_func = async (
         }
         else
         {
-            if (stamp_mode.includes("major") || stamp_mode.includes("minor") || stamp_mode.includes("patch"))
+            if (stamp_mode.includes("major") || stamp_mode.includes("minor") || stamp_mode.includes("patch") || stamp_mode.includes("hotfix"))
             {
                 out = await execute(`vmn ${extra_args} stamp ${stamp_params} ${stamp_params} -r ${stamp_mode} ${app_name}`);
                 debug_mode === "true" ? core.info(`vmn ${extra_args} init stdout: ${out}`) : "";
             }
             else
             {
-                await fail("Invaild stamp-mode (major, minor, or patch)", show_log_on_error);
+                await fail("Invaild stamp-mode (major, minor, patch, or hotfix)", show_log_on_error);
             }
         }
 
