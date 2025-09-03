@@ -19,6 +19,7 @@ inputs:
       - major
       - minor
       - patch
+      - hotfix
     default: none
   release-candidate: 
     type: boolean
