@@ -1,406 +1,247 @@
 # VMN Action
 
-[![vmn: automatic versioning](https://img.shields.io/badge/vmn-automatic%20versioning-blue)](https://github.com/final-israel/vmn)
+[![vmn: automatic versioning](https://img.shields.io/badge/vmn-automatic%20versioning-blue)](https://github.com/progovoy/vmn)
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-vmn--action-green)](https://github.com/marketplace/actions/automated-versioning)
 
-Action for Git tag-based automatic `Semver`-compliant versioning utilizing the `vmn` utility
+Automated semantic versioning for GitHub Actions, powered by [vmn](https://github.com/progovoy/vmn).
 
-This action was built for basic use of the `vmn` utility.
+Language-agnostic, git-tag-based versioning with support for monorepos, multi-app, release candidates, and conventional commits.
 
-If you want to use `vmn` in a more advanced way, visit its official GitHub page and give it a star:
-
-General VMN information <https://github.com/final-israel/vmn>
-VMN Stamping info - <https://github.com/final-israel/vmn#4-vmn-stamp>
-VMN Generator info - <https://github.com/final-israel/vmn#vmn-gen>
-
-- [VMN Action](#vmn-action)
-  - [Usage](#usage)
-  - [Full Example](#full-example)
-  - [Stamp Examples](#stamp-examples)
-    - [Stamp Without Release Candidate Mode](#stamp-without-release-candidate-mode)
-    - [Stamp With Release Candidate Mode](#stamp-with-release-candidate-mode)
-      - [First RC Stamp](#first-rc-stamp)
-      - [Non-First RC Stamp](#non-first-rc-stamp)
-      - [Release RC Version](#release-rc-version)
-  - [Generator Examples](#generator-examples)
-
-## Usage
+## Quick Start
 
 ```yaml
-- id: foo
-  uses: progovoy/vmn-action@vmna_0.1.73
+name: Version Stamp
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  stamp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # vmn needs full git history
+
+      - id: vmn
+        uses: progovoy/vmn-action@latest
+        with:
+          app-name: my_app
+          do-stamp: true
+          stamp-mode: patch
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - run: echo "Stamped version ${{ steps.vmn.outputs.verstr }}"
+```
+
+## Inputs
+
+| Input | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `app-name` | string | Yes | — | Name of the app to stamp |
+| `do-stamp` | boolean | No | `false` | Perform a version stamp |
+| `stamp-mode` | choice | No | `none` | Release mode: `major`, `minor`, `patch`, or `none` |
+| `release-candidate` | boolean | No | `false` | Enter release candidate mode |
+| `prerelease-name` | string | No | `rc` | Prerelease suffix (e.g., `rc` produces `1.2.3-rc.1`) |
+| `release` | boolean | No | `false` | Release a prerelease version to final |
+| `stamp-from-version` | string | No | — | Override the base version for stamping |
+| `skip-version` | boolean | No | `false` | Skip versions between release candidates |
+| `do-gen` | boolean | No | `false` | Generate a version file from a Jinja2 template |
+| `gen-template-path` | string | No | — | Path to Jinja2 template file |
+| `gen-output-path` | string | No | — | Path for generated output file |
+| `gen-custom-yaml-path` | string | No | — | Path to custom YAML params file |
+| `show-log-on-error` | boolean | No | `false` | Show vmn log on error |
+| `debug-mode` | boolean | No | `false` | Enable extra debug logging |
+| `install-nonstable-vmn-version` | boolean | No | `false` | Install latest RC version of vmn |
+
+## Outputs
+
+| Output | Description |
+|--------|-------------|
+| `verstr` | The version string after stamping (e.g., `1.2.3`) |
+| `dirty` | `true` if changes exist since last stamp |
+| `is_in_rc_mode` | `true` if the app is in release candidate mode |
+| `verbose_yaml` | Full `vmn show --verbose` output as YAML |
+
+## Examples
+
+### Basic Stamp
+
+Stamp a patch version on every push to main:
+
+```yaml
+name: Stamp Version
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  stamp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: vmn
+        uses: progovoy/vmn-action@latest
+        with:
+          app-name: my_app
+          do-stamp: true
+          stamp-mode: patch
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - run: echo "Version: ${{ steps.vmn.outputs.verstr }}"
+```
+
+### Manual Stamp with Mode Selection
+
+Use `workflow_dispatch` to choose the release mode at trigger time:
+
+```yaml
+name: Manual Stamp
+
+on:
+  workflow_dispatch:
+    inputs:
+      stamp_mode:
+        type: choice
+        description: Release mode
+        options:
+          - patch
+          - minor
+          - major
+        required: true
+
+jobs:
+  stamp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: vmn
+        uses: progovoy/vmn-action@latest
+        with:
+          app-name: my_app
+          do-stamp: true
+          stamp-mode: ${{ inputs.stamp_mode }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - run: echo "Version: ${{ steps.vmn.outputs.verstr }}"
+```
+
+### Release Candidate Workflow
+
+RC workflows have three phases:
+
+**1. First RC** — Start a release candidate from a released version:
+
+```yaml
+- uses: progovoy/vmn-action@latest
   with:
-    app-name: <APP_NAME>                          # Must be provided
-
-    # Stamping - For more info https://github.com/final-israel/vmn#4-vmn-stamp
-    do-stamp: <Boolean>                           # Mark to perform a stamp
-    stamp-mode: {none, major, minor, patch}       # select "none" only when you want to continue the rc part and only after the first rc stamp. 
-                                                  #   For the first rc stamp you need one of the (patch, minor, major) options combined with release-candidate
-    release-candidate: <Boolean>                  # Set either release-candidate to start release candidate mode
-    release: <Boolean>                            # Set true only when you want to release the release-candidate version  
-    prerelease-name: <PRERELEASE_NAME>            # Name of Prereleased Version (<VERSION>-<PRERELEASE_NAME><SERIAL_NUMBER>). Default value is "rc"
-    stamp-from-version: <STAMP_FROM_VERSION>      # Optional: Overwrite the base that VMN stamp will work from
-    skip-version: <Boolean>                       # Optional: Skip versions between Release Candidates
-
-    # Generator - For more info https://github.com/final-israel/vmn#vmn-gen 
-    do-gen: <Boolean>                             # Mark to perform a generator
-    gen-template-path: <GEN_TEMPLATE_PATH>        # Jinja2 Template path
-    gen-output-path: <GEN_OUTPUT_PATH>            # Saving path
-    gen-custom-yaml-path: <GEN_CUSTOM_YAML_PATH>  # Customs params YAML file path
-
-    # Advanced Flags
-    show-log-on-error: <Boolean>                  # Do you want to see the VMN log on error?
-    debug-mode: <Boolean>                         # Show extra logs to help us improve VMNA and VMN
-    install-nonstable-vmn-version: <Boolean>      # Install latest rc version of VMN
+    app-name: my_app
+    do-stamp: true
+    stamp-mode: minor          # The bump for the eventual release
+    release-candidate: true
   env:
-    GITHUB_TOKEN: ${{ github.token }}         # For permission checks
-    
-
-- name: Use the output from vmn action
-  run: |
-    echo "The Version is: ${{ steps.foo.outputs.verstr }}"
-    echo "Is the code dirty?: ${{ steps.foo.outputs.dirty }}"
-    echo "Is the app in Release Candidate Mode: ${{ steps.foo.outputs.is_in_rc_mode }}"
-    echo "The whole vmn show for you to parser is: ${{ steps.foo.outputs.verbose_yaml }}"
-
+    GITHUB_TOKEN: ${{ github.token }}
+# Result: 1.2.0-rc.1
 ```
 
-## Full Example
-
-Fully Working Example With All Options As Input Params
-
-Currently GitHub Actions support up to 10 inputs so this Example will not work out of the box
+**2. Subsequent RCs** — Increment the RC number (no stamp-mode needed):
 
 ```yaml
-name: test
-
-on:
-  workflow_dispatch:
-    inputs:
-      app_name:
-        type: string
-        description: App name
-        required: true
-      do_stamp:
-        type: boolean
-        description: Do you want to stamp a version?
-        default: false
-      stamp_mode:
-        type: choice
-        description: Release mode
-        options:
-        - none
-        - patch
-        - minor
-        - major
-        required: true
-      release_candidate:
-        type: boolean
-        description: Do you want to create a Release Candidate?
-        default: false
-      release:
-        type: boolean
-        description: Do you want to release a RC version? (Prereleased -> Released)
-        default: false
-      prerelease_name:
-        type: string
-        description: Name of Prereleased Version
-      stamp_from_version:
-        type: string
-        description: Overwrite the base that VMN stamp will work from
-      skip-version:
-        type: boolean
-        description: Do you want to skip versions between Release Candidates?
-      do_gen:
-        type: boolean
-        description: Create a generated version file?
-        default: false
-      gen_template_path: 
-        type: string
-        description: Path for Jinja2 Template file
-      gen_output_path: 
-        type: string
-        description: Path for output file
-      gen_custom_yaml_path: 
-        type: string
-        description: Path for custom YAML file
-      show_log_on_error: 
-        type: boolean
-        description: Do you want to see the VMN log on error?
-        default: false
-      debug_mode: 
-        type: boolean
-        description: Show extra logs?
-        default: false
-      install_nonstable_vmn_version: 
-        type: boolean
-        description: Install latest RC version of VMN
-        default: false    
-
-
-jobs:
-  build_pkg:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2.5.0
-
-    - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.73
-      with:
-        app-name: ${{ inputs.app_name }}
-        do-stamp: ${{ inputs.do_stamp }}
-        stamp-mode: ${{ inputs.stamp_mode }}
-        release-candidate: ${{ inputs.release_candidate }}
-        release: ${{ inputs.release }}
-        prerelease-name: ${{ inputs.prerelease_name }}
-        stamp-from-version: ${{ inputs.stamp_from_version }}
-        skip-version: ${{ inputs.skip_version }}
-        do-gen: ${{ inputs.do_gen }}
-        gen-template-path: ${{ inputs.gen_template_path }}
-        gen-output-path: ${{ inputs.gen_output_path }}
-        gen-custom-yaml-path: ${{ inputs.gen_custom_yaml_path }}
-        show-log-on-error: ${{ inputs.show_log_on_error }}
-        debug-mode: ${{ inputs.debug_mode }}
-        install-nonstable-vmn-version: ${{ inputs.install_nonstable_vmn_version }}
-      env:
-        GITHUB_TOKEN: ${{ github.token }} 
-     
-    - name: Use the output from vmn action
-      run: |
-        echo "The Version is: ${{ steps.foo.outputs.verstr }}"
-        echo "Is the code dirty?: ${{ steps.foo.outputs.dirty }}"
-        echo "Is the app in Release Candidate Mode: ${{ steps.foo.outputs.is_in_rc_mode }}"
-        echo "The whole vmn show for you to parser is: ${{ steps.foo.outputs.verbose_yaml }}"
-
- ```
-
-## Stamp Examples
-
-### Stamp Without Release Candidate Mode
-
-```yaml
-name: test
-
-on:
-  workflow_dispatch:
-    inputs:
-      app_name:
-        description: App name
-        required: true
-      do_stamp:
-        type: boolean
-        description: Do you want to stamp a version?
-        default: false
-      stamp_mode:
-        type: choice
-        description: Release mode
-        options:
-        - patch
-        - minor
-        - major
-        required: true
-
-jobs:
-  build_pkg:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2.5.0
-
-    - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.73
-      with:
-        app-name: ${{ inputs.app_name }}
-        do-stamp: ${{ inputs.do_stamp }}
-        stamp-mode: ${{ inputs.stamp_mode }}
-      env:
-        GITHUB_TOKEN: ${{ github.token }} 
-     
-    - name: Use the output from vmn action
-      run: |
-        echo "${{ steps.foo.outputs.verstr }}"
-
- ```
-
-### Stamp With Release Candidate Mode
-
-#### First RC Stamp
-
-Firstly, we stamp a release candidate version from a released version
-
-```yaml
-name: test
-
-on:
-  workflow_dispatch:
-    inputs:
-      app_name:
-        description: App name
-        required: true
-      do_stamp:
-        type: boolean
-        description: Do you want to stamp a version?
-        default: false
-      stamp_mode:
-        type: choice
-        description: Release mode
-        options:
-        - patch
-        - minor
-        - major
-        required: true
-      prerelease_name:
-        description: Prerelease name
-
-jobs:
-  build_pkg:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2.5.0
-
-    - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.73
-      with:
-        app-name: ${{ inputs.app_name }}
-        do-stamp: ${{ inputs.do_stamp }}
-        stamp-mode: ${{ inputs.stamp_mode }}
-        release-candidate: true
-        release: false
-        prerelease-name: ${{ inputs.prerelease_name }}
-      env:
-        GITHUB_TOKEN: ${{ github.token }} 
-     
-    - name: Use the output from vmn action
-      run: |
-        echo "${{ steps.foo.outputs.verstr }}"
-
- ```
-
-#### Non-First RC Stamp
-
-After the first RC stamp, we stamp a release candidate version from a prereleased version
-
-```yaml
-name: test
-
-on:
-  workflow_dispatch:
-    inputs:
-      app_name:
-        description: App name
-        required: true
-      do_stamp:
-        type: boolean
-        description: Do you want to stamp a version?
-        default: false
-      prerelease_name:
-        description: Prerelease name
-
-jobs:
-  build_pkg:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2.5.0
-
-    - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.73
-      with:
-        app-name: ${{ inputs.app_name }}
-        do-stamp: ${{ inputs.do_stamp }}
-        release-candidate: true
-        release: false
-        prerelease-name: ${{ inputs.prerelease_name }}
-      env:
-        GITHUB_TOKEN: ${{ github.token }} 
-     
-    - name: Use the output from vmn action
-      run: |
-        echo "${{ steps.foo.outputs.verstr }}"
-
- ```
-
-#### Release RC Version
-
-Finally, when we are ready to release the prereleased version
-
-```yaml
-name: test
-
-on:
-  workflow_dispatch:
-    inputs:
-      app_name:
-        description: App name
-        required: true
-      do_stamp:
-        type: boolean
-        description: Do you want to stamp a version?
-        default: false
-
-jobs:
-  build_pkg:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2.5.0
-
-    - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.73
-      with:
-        app-name: ${{ inputs.app_name }}
-        do-stamp: ${{ inputs.do_stamp }}
-        release: true
-      env:
-        GITHUB_TOKEN: ${{ github.token }} 
-     
-    - name: Use the output from vmn action
-      run: |
-        echo "${{ steps.foo.outputs.verstr }}"
-
- ```
-
-## Generator Examples
-
-```yaml
-name: test
-
-on:
-  workflow_dispatch:
-    inputs:
-      app_name:
-        description: App name
-        required: true
-      do_gen:
-        type: boolean
-        description: Create a generated version file?
-        deafult: false
-      gen_template_path: 
-        type: string
-        description: Path for Jinja2 Template file
-      gen_output_path: 
-        type: string
-        description: Path for output file
-      gen_custom_yaml_path: 
-        type: string
-        description: Path for custom YAML file
-
-  
-jobs:
-  build_pkg:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2.5.0
-
-    - id: foo
-      uses: progovoy/vmn-action@vmna_0.1.73
-      with:
-        app-name: ${{ inputs.app_name }}
-        do-gen: ${{ inputs.do_gen }}
-        gen-template-path: ${{ inputs.gen_template_path }}
-        gen-output-path: ${{ inputs.gen_output_path }}
-        gen-custom-yaml-path: ${{ inputs.gen_custom_yaml_path }}
-      env:
-        GITHUB_TOKEN: ${{ github.token }} 
-     
-    - name: Use the output from vmn action
-      run: |
-        cat ${{ inputs.gen_output_path }}
-      
+- uses: progovoy/vmn-action@latest
+  with:
+    app-name: my_app
+    do-stamp: true
+    release-candidate: true
+  env:
+    GITHUB_TOKEN: ${{ github.token }}
+# Result: 1.2.0-rc.2, 1.2.0-rc.3, ...
 ```
+
+**3. Release** — Promote the RC to a final release:
+
+```yaml
+- uses: progovoy/vmn-action@latest
+  with:
+    app-name: my_app
+    do-stamp: true
+    release: true
+  env:
+    GITHUB_TOKEN: ${{ github.token }}
+# Result: 1.2.0
+```
+
+### Monorepo / Multi-App
+
+Stamp multiple apps independently in one workflow:
+
+```yaml
+jobs:
+  stamp:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [frontend, backend, api-gateway]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: vmn
+        uses: progovoy/vmn-action@latest
+        with:
+          app-name: ${{ matrix.app }}
+          do-stamp: true
+          stamp-mode: patch
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - run: echo "${{ matrix.app }} version: ${{ steps.vmn.outputs.verstr }}"
+```
+
+### Version File Generation
+
+Generate a version file from a Jinja2 template:
+
+```yaml
+- uses: progovoy/vmn-action@latest
+  with:
+    app-name: my_app
+    do-gen: true
+    gen-template-path: version.jinja2
+    gen-output-path: version.txt
+  env:
+    GITHUB_TOKEN: ${{ github.token }}
+
+- run: cat version.txt
+```
+
+## Permissions
+
+The action requires a `GITHUB_TOKEN` environment variable for:
+- Permission checks (verifies the triggering user has write access)
+- Git operations (push tags)
+
+The default `${{ github.token }}` works for most cases. For cross-repo scenarios, use a Personal Access Token with `repo` scope.
+
+## Important Notes
+
+- Always use `fetch-depth: 0` in `actions/checkout` — vmn needs the full git history to find previous version tags.
+- The action automatically runs `vmn init` and `vmn init-app` if they haven't been run yet.
+- Version information is stored in git tags, not in files — your repo stays clean.
+
+## Links
+
+- [vmn CLI documentation](https://github.com/progovoy/vmn) — full feature reference
+- [vmn on PyPI](https://pypi.org/project/vmn/) — install locally with `pip install vmn`
+- [Report an issue](https://github.com/progovoy/vmn-action/issues)

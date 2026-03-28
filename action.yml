@@ -1,5 +1,5 @@
 name: 'Automated versioning'
-description: 'vmn based, production grade solution for versioning agnostic to language. Full support for semantic versioning (Semver).'
+description: 'Production-grade semantic versioning via vmn. Language-agnostic, supports monorepos, multi-app, release candidates, and conventional commits. Git-tag based, zero lock-in.'
 branding:
   icon: trending-up
   color: green
@@ -67,5 +67,5 @@ outputs:
   verbose_yaml:
     description: 'The whole "vmn show --verbose <APP_NAME>" output'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
