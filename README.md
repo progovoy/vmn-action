@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # vmn needs full git history
+          fetch-depth: 0
 
       - id: vmn
         uses: progovoy/vmn-action@latest
@@ -236,7 +236,7 @@ The default `${{ github.token }}` works for most cases. For cross-repo scenarios
 
 ## Important Notes
 
-- Always use `fetch-depth: 0` in `actions/checkout` — vmn needs the full git history to find previous version tags.
+- `fetch-depth: 0` is recommended for conventional commits / changelog analysis. For basic stamping, vmn works with shallow clones — it fetches tags automatically.
 - The action automatically runs `vmn init` and `vmn init-app` if they haven't been run yet.
 - Version information is stored in git tags, not in files — your repo stays clean.
 
