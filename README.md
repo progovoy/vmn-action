@@ -7,6 +7,8 @@ Automated semantic versioning for GitHub Actions, powered by [vmn](https://githu
 
 Language-agnostic, git-tag-based versioning with support for monorepos, multi-app, release candidates, and conventional commits.
 
+> ⭐ If vmn stamps your releases, a star on [progovoy/vmn](https://github.com/progovoy/vmn) helps other teams find it.
+
 ## Quick Start
 
 ```yaml
